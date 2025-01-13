@@ -12,7 +12,8 @@ const Header = () => {
   const handleRegister = useCallback(() => navigate("/register"), [navigate]);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-color-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-50 w-full border-b border-color-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
+      <div className="absolute inset-0 bg-main-color-background -z-[1] opacity-80"></div>
       <div className="container mx-auto px-4 h-16 flex justify-between items-center">
         <div className="logo font-bold text-color-text-1 text-xl">
           <NavLink to="/">

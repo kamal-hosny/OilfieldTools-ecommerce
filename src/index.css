@@ -6,7 +6,7 @@
     :root {
         /* Tailwind variables Light */
         --main-color-background: 246, 246, 248;
-        --section-color: 245, 245, 245;
+        --section-color: 244, 247, 250;
         --main-color: 23, 23, 23;
         --main-color-hover: 46, 46, 46;
         --color-text-1: 10, 10, 10;
@@ -22,7 +22,7 @@
 :root {
     /* CSS variables Light */
     --main-color-background-css: rgb(246, 246, 248);    
-    --section-color-css: rgb(245, 245, 245);
+    --section-color-css: rgb(244, 247, 250);
     --main-color-css: rgb(23, 23, 23);
     --main-color-hover-css: rgb(46, 46, 46);
     --color-text-1-css: rgb(10, 10, 10);

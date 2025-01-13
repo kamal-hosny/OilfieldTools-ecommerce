@@ -11,7 +11,6 @@ const DarkMode = memo(
     const dispatch = useDispatch();
     const { isDarkMode } = useSelector((state: RootState) => state.darkMode);
     
-    console.log(isDarkMode);
     
     const handleToggle = () => {
       dispatch(toggleDarkMode());

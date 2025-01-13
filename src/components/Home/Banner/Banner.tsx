@@ -3,7 +3,7 @@ import Button from "../../ui/Button";
 
 const Banner = () => {
   return (
-    <div className="banner-oilfield my-4">
+    <div className="banner-oilfield bg-section-color py-4">
       <div className="container mx-auto px-4">
         <div
           className="card bg-gray-800 p-12 rounded-lg bg-cover bg-center h-[350px] flex flex-col justify-center gap-5"

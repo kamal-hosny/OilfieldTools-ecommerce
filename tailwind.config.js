@@ -1,5 +1,8 @@
 /** @type {import('tailwindcss').Config} */
-export default {
+module.exports = {
+  corePlugins: {
+    container: false, // تعطيل الإعداد الافتراضي للحاوية
+  },
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
@@ -20,5 +23,27 @@ export default {
       },
     },
   },
-  plugins: [],
-}
+  plugins: [
+    function ({ addComponents }) {
+      addComponents({
+        '.container': {
+          maxWidth: '100%',
+          margin: '0 auto',
+          padding: '1rem', 
+          '@screen sm': {
+            maxWidth: '640px',
+          },
+          '@screen md': {
+            maxWidth: '768px',
+          },
+          '@screen lg': {
+            maxWidth: '1280px',
+          },
+          '@screen xl': {
+            maxWidth: '1400px',
+          },
+        },
+      });
+    },
+  ],
+};
