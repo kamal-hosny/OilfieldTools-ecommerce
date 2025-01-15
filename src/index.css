@@ -5,7 +5,7 @@
 @layer base {
     :root {
         /* Tailwind variables Light */
-        --main-color-background: 246, 246, 248;
+        --main-color-background: 255, 255, 255;
         --section-color: 244, 247, 250;
         --main-color: 23, 23, 23;
         --main-color-hover: 46, 46, 46;
@@ -21,7 +21,7 @@
 
 :root {
     /* CSS variables Light */
-    --main-color-background-css: rgb(246, 246, 248);    
+    --main-color-background-css: rgb(255, 255, 255);    
     --section-color-css: rgb(244, 247, 250);
     --main-color-css: rgb(23, 23, 23);
     --main-color-hover-css: rgb(46, 46, 46);
