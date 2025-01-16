@@ -1,7 +1,11 @@
 import { Suspense, lazy } from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 // layouts
+import LottieHandler from "../components/common/feedback/LottieHandler/LottieHandler";
 import { MainLayout } from "../layouts";
+import PageSuspenseFallback from "../components/common/feedback/PageSuspenseFallback/PageSuspenseFallback";
+import Error from "../pages/Error";
+import About from "../pages/About";
 
 // pages
 const Home = lazy(() => import("../pages/Home"));
@@ -15,55 +19,71 @@ const AppRouter = () => {
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <MainLayout />,
-      // errorElement: <ErrorPage />,
+      element: (
+        <Suspense fallback={
+          <div className="relative login bg-section-color w-screen h-[calc(100vh-65px)] flex justify-center items-center">
+            <LottieHandler type="loading" message="Loading please wait..." />
+          </div>
+        }>
+          <MainLayout />
+        </Suspense>
+      ),
+      errorElement: <Error />,
       children: [
         {
           index: true,
           element: (
-            <Suspense fallback={<div>Loading Home...</div>}>
+            <PageSuspenseFallback>
               <Home />
-            </Suspense>
+            </PageSuspenseFallback>
+          ),
+        },
+        {
+          path: "about",
+          element: (
+            <PageSuspenseFallback>
+              <About />
+            </PageSuspenseFallback>
           ),
         },
         {
           path: "login",
           element: (
-            <Suspense fallback={<div>Loading Login...</div>}>
+            <PageSuspenseFallback>
               <Login />
-            </Suspense>
+            </PageSuspenseFallback>
           ),
         },
         {
           path: "register",
           element: (
-            <Suspense fallback={<div>Loading Register...</div>}>
+            <PageSuspenseFallback>
               <Register />
-            </Suspense>
+            </PageSuspenseFallback>
           ),
         },
         {
           path: "forgotPassword",
           element: (
-            <Suspense fallback={<div>Loading Forgot Password...</div>}>
+            <PageSuspenseFallback>
               <ForgotPassword />
-            </Suspense>
+            </PageSuspenseFallback>
           ),
         },
         {
           path: "VerifyYourEmail",
           element: (
-            <Suspense fallback={<div>Loading Verify Your Email...</div>}>
+            <PageSuspenseFallback>
               <VerifyYourEmail />
-            </Suspense>
+            </PageSuspenseFallback>
           ),
         },
         {
           path: "CreateNewPassword",
           element: (
-            <Suspense fallback={<div>Loading Verify Your Email...</div>}>
+            <PageSuspenseFallback>
               <CreateNewPassword />
-            </Suspense>
+            </PageSuspenseFallback>
           ),
         },
       ],

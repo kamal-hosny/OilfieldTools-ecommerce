@@ -3,13 +3,21 @@ import { NavLink, useNavigate } from "react-router-dom";
 import Button from "../../ui/Button";
 import DarkMode from "./DarkMode/DarkMode";
 import Cart from "./Cart/Cart";
-import { memo, useCallback } from "react";
+import { memo, useCallback, useState } from "react";
+import Favorite from "./Favorite/Favorite";
+import NavbarMobile from "./Mobile/NavbarMobile/NavbarMobile";
 
 const Header = () => {
   const navigate = useNavigate();
 
+const [openNav, setOpenNav] = useState<boolean>(false)
+
   const handleLogin = useCallback(() => navigate("/login"), [navigate]);
   const handleRegister = useCallback(() => navigate("/register"), [navigate]);
+  
+  const closeMenu = () =>{
+    setOpenNav((prev) => !prev)
+}
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-color-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
@@ -43,6 +51,7 @@ const Header = () => {
         <div className="o-nav flex justify-center items-center gap-3">
           <div className="action-nav flex gap-1.5 justify-center items-center">
             <DarkMode />
+            <Favorite />
             <Cart />
           </div>
           <div className="btn flex gap-1.5 justify-center items-center max-md:hidden">
@@ -52,12 +61,14 @@ const Header = () => {
             <Button onClick={handleRegister} className="bg-button-color hover:bg-button-hover-color text-main-color-background">Register</Button>
           </div>
           <div className="menu md:hidden">
-            <Button className="bg-transparent !text-color-text-1 hover:bg-section-color !p-2">
+            <Button onClick={closeMenu} className="bg-transparent !text-color-text-1 hover:bg-section-color !p-2">
               <Menu size={20} />
             </Button>
           </div>
         </div>
       </div>
+      {/* NavbarMobile */}
+      <NavbarMobile open={openNav} closeMenu={closeMenu} />
     </header>
   );
 };
