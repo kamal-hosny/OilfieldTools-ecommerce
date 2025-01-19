@@ -6,6 +6,7 @@ import { MainLayout } from "../layouts";
 import PageSuspenseFallback from "../components/common/feedback/PageSuspenseFallback/PageSuspenseFallback";
 import Error from "../pages/Error";
 import About from "../pages/About";
+import Material from "../pages/Material";
 
 // pages
 const Home = lazy(() => import("../pages/Home"));
@@ -35,6 +36,14 @@ const AppRouter = () => {
           element: (
             <PageSuspenseFallback>
               <Home />
+            </PageSuspenseFallback>
+          ),
+        },
+        {
+          path: "materials",
+          element: (
+            <PageSuspenseFallback>
+              <Material />
             </PageSuspenseFallback>
           ),
         },
