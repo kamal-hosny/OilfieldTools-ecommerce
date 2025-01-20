@@ -9,6 +9,7 @@ import About from "../pages/About";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../store";
 import { checkMobileWidth } from "../store/features/mobileWidth/mobileWidthThunk";
+import CartPage from "../pages/CartPage";
 
 // pages
 const Home = lazy(() => import("../pages/Home"));
@@ -81,6 +82,14 @@ const AppRouter = () => {
           element: (
             <PageSuspenseFallback>
               <Wishlist />
+            </PageSuspenseFallback>
+          ),
+        },
+        {
+          path: "cart",
+          element: (
+            <PageSuspenseFallback>
+              <CartPage />
             </PageSuspenseFallback>
           ),
         },
