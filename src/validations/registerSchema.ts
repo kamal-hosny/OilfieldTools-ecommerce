@@ -11,21 +11,20 @@ const registerSchema = z.object({
     .email(),
   companyName: string().min(1, { message: "Company name is required" }),
   phoneNumber: z.string(),
-  password:  z
-  .string()
-  .min(8, { message: "Password must be at least 8 characters longs" })
-  .regex(/.*[!@#$%^&*()_+{}|[\]\\:";'<>?,./].*/, {
-    message: "Password should contain at least 1 special character",
-  })
-  ,
-  comfirmPassword: z
+  password: z
     .string()
-    .min(1, { message: "Confirm Password is required" })
-}).refine((input) => input.password === input.comfirmPassword, {
-    message: "Password and Confirm Password does not match",
-    path: ["confirmPassword"],
-})
+    .min(8, { message: "Password must be at least 8 characters long" })
+    .regex(/.*[!@#$%^&*()_+{}|[\]\\:";'<>?,./].*/, {
+      message: "Password should contain at least 1 special character",
+    }),
+  confirmPassword: z
+    .string()
+    .min(1, { message: "Confirm Password is required" }),
+}).refine((input) => input.password === input.confirmPassword, {
+  message: "Password and Confirm Password do not match",
+  path: ["confirmPassword"],
+});
 
 type registerType = z.infer<typeof registerSchema>;
 
-export { registerSchema, type registerType }
+export { registerSchema, type registerType };

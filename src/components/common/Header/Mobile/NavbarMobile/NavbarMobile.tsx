@@ -7,7 +7,7 @@ interface INavbarMobile {
     closeMenu: () => void
 }
 
-const NavbarMobile = ({open, closeMenu}: INavbarMobile) => {
+const NavbarMobile = memo(({open, closeMenu}: INavbarMobile) => {
     const navigate = useNavigate();
 
     const handleLogin = useCallback(() => navigate("/login"), [navigate]);
@@ -16,13 +16,17 @@ const NavbarMobile = ({open, closeMenu}: INavbarMobile) => {
 
 
   return (
-    <div className={`flex flex-col gap-4 p-4 text-color-text-1 bg-main-color-background absolute w-screen h-screen z-50 transition-all`} style={{left: `${open ? "0" : "100" }%`}}>
+<div 
+  className={`flex flex-col gap-4 p-4 text-color-text-1 bg-main-color-background fixed w-screen h-screen z-50 transition-transform duration-300`}
+  style={{ transform: open ? "translateX(0)" : "translateX(100%)" }}
+>
+
         <ul className="flex flex-col gap-4">
             <li className="">
             <NavLink to={"/"} onClick={closeMenu} className={"bg-section-color w-full px-3 py-2 block font-medium "}>Home</NavLink>
             </li>
             <li>
-            <NavLink to={"/materials"} onClick={closeMenu} className={"bg-section-color w-full px-3 py-2 block font-medium "}>Materials</NavLink>
+            <NavLink to={"/products"} onClick={closeMenu} className={"bg-section-color w-full px-3 py-2 block font-medium "}>Products</NavLink>
             </li>
             <li>
             <NavLink to={"/about"} onClick={closeMenu} className={"bg-section-color w-full px-3 py-2 block font-medium "}>About</NavLink>
@@ -43,6 +47,6 @@ const NavbarMobile = ({open, closeMenu}: INavbarMobile) => {
         </div>
     </div>
   )
-}
+})
 
-export default memo(NavbarMobile)
+export default NavbarMobile

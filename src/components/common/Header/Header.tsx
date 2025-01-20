@@ -37,8 +37,8 @@ const [openNav, setOpenNav] = useState<boolean>(false)
               </NavLink>
             </li>
             <li>
-              <NavLink to="materials" className="text-color-text-2 hover:text-color-hover-text-2 active:text-color-hover-text-2">
-                Materials
+              <NavLink to="products" className="text-color-text-2 hover:text-color-hover-text-2 active:text-color-hover-text-2">
+              Products
               </NavLink>
             </li>
             <li>

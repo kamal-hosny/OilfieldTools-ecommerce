@@ -71,3 +71,7 @@ body.dark {
     --button-hover-color-css: rgb(226, 226, 226);
 }
 
+body{
+    width: 100vw;
+    overflow-x: hidden;
+}
