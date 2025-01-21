@@ -1,13 +1,24 @@
 import { Eye, EyeClosed, Lock, Mail } from "lucide-react";
 import { useState } from "react";
 import Button from "../components/ui/Button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { loginSchema, loginType } from "../validations/loginSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Input from "../components/Form/Input/Input";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { actAuthLogin, actAuthResendEmail } from "../store/auth/authSlice";
 
 const Login = () => {
+  const dispatch = useAppDispatch();
+
+  const navigate = useNavigate();
+
+  const sttt = useAppSelector((state) => state.auth);
+
+  console.log(sttt);
+  
+
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const {
@@ -21,6 +32,32 @@ const Login = () => {
 
   const onSubmit: SubmitHandler<loginType> = (data) => {
     console.log(data);
+    dispatch(
+      actAuthLogin({
+        Email: data.email,
+        password: data.password}))
+      .unwrap()
+      .then(() => {
+        navigate("/");
+      }).catch((err) =>{
+        console.log(err);
+        
+        if(err.isVerified === false){
+          dispatch(
+            actAuthResendEmail(
+                {
+                    Email: data.email
+                }
+            )
+        )
+          navigate("/VerifyYourAccount", {
+            state: {email: data.email}
+          });
+        }
+        
+      })
+    
+
   };
 
   return (

@@ -10,6 +10,7 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "../store";
 import { checkMobileWidth } from "../store/features/mobileWidth/mobileWidthThunk";
 import CartPage from "../pages/CartPage";
+import VerifyYourAccount from "../pages/VerifyYourAccount";
 
 // pages
 const Home = lazy(() => import("../pages/Home"));
@@ -122,6 +123,14 @@ const AppRouter = () => {
           element: (
             <PageSuspenseFallback>
               <VerifyYourEmail />
+            </PageSuspenseFallback>
+          ),
+        },
+        {
+          path: "VerifyYourAccount",
+          element: (
+            <PageSuspenseFallback>
+              <VerifyYourAccount />
             </PageSuspenseFallback>
           ),
         },

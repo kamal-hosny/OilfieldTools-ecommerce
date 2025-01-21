@@ -1,6 +1,5 @@
 import React, { useRef } from "react";
 import Button from "../../components/ui/Button";
-import { Link } from "react-router-dom";
 
 const VerifyYourEmail = () => {
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
@@ -8,8 +7,12 @@ const VerifyYourEmail = () => {
 
   const handleInputChange  = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
     const value = e.target.value;
-    if(value.length === 1 && index < 3) {
-      inputRefs.current[index + 1]?.focus();
+    if(/^\d*$/.test(value)){ //nums only
+      if(value.length === 1 && index < 3) {
+        inputRefs.current[index + 1]?.focus();
+      }
+    } else {
+      e.target.value = "";
     }
   };
 
@@ -17,6 +20,13 @@ const VerifyYourEmail = () => {
     if (e.key === "Backspace" && !e.currentTarget.value && index > 0) {
       inputRefs.current[index - 1]?.focus()
     }
+  }
+
+  const handleVerifyClick = () => {
+    const code = inputRefs.current.map((input) => input?.value || "").join("")
+
+    console.log(code);
+    
   }
 
 
@@ -36,6 +46,8 @@ const VerifyYourEmail = () => {
           key={index} 
           ref={(el) => (inputRefs.current[index] = el)} 
           type="text" 
+          inputMode="numeric"
+          pattern="[0-9]*"
           maxLength={1}
           className="w-12 h-12 text-center bg-section-color text-color-text-1 border border-color-border rounded-lg text-lg focus:outline-none focus:ring focus:ring-cyan-400"
           onChange={(e) => handleInputChange(e, index)}
@@ -47,11 +59,11 @@ const VerifyYourEmail = () => {
 
           <p className="text-cyan-400 hover:text-cyan-600 cursor-pointer text-center">Resend Code</p>
 
-        <Button className="bg-button-color hover:bg-button-hover-color w-full text-main-color-background font-semibold">
+        <Button onClick={()=>{handleVerifyClick()}} className="bg-button-color hover:bg-button-hover-color w-full text-main-color-background font-semibold">
           
-          <Link to="/CreateNewPassword">
+          {/* <Link to="/CreateNewPassword"> */}
           Verify
-          </Link>
+          {/* </Link> */}
         </Button>
       </div>
     </div>

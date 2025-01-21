@@ -68,7 +68,9 @@ const [openNav, setOpenNav] = useState<boolean>(false)
         </div>
       </div>
       {/* NavbarMobile */}
+      <div className="relative">
       <NavbarMobile open={openNav} closeMenu={closeMenu} />
+      </div>
     </header>
   );
 };

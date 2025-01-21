@@ -11,6 +11,7 @@ const registerSchema = z.object({
     .email(),
   companyName: string().min(1, { message: "Company name is required" }),
   phoneNumber: z.string(),
+  country: z.string().min(1, { message: "Country name is required" }),
   password: z
     .string()
     .min(8, { message: "Password must be at least 8 characters long" })

@@ -1,9 +1,9 @@
 import { Heart } from "lucide-react";
-import formatCurrency from "../../../utils/formatCurrency";
+import { formatCurrency } from "../../../utils";
 import Button from "../../ui/Button";
 import Img from "../../ui/Img";
 import { useState } from "react";
-import { textSlicer } from "../../../utils/textSlicer";
+import { textSlicer } from "../../../utils";
 
 interface IProductCard {
   title: string,

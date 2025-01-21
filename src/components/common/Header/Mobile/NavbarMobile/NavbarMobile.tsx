@@ -17,8 +17,8 @@ const NavbarMobile = memo(({open, closeMenu}: INavbarMobile) => {
 
   return (
 <div 
-  className={`flex flex-col gap-4 p-4 text-color-text-1 bg-main-color-background fixed w-screen h-screen z-50 transition-transform duration-300`}
-  style={{ transform: open ? "translateX(0)" : "translateX(100%)" }}
+  className={` ${open ? "flex" : "hidden"}  flex-col gap-4 p-4 text-color-text-1 bg-main-color-background absolute w-screen h-screen z-50 transition-transform duration-300`}
+  // style={{ transform: open ? "translateX(0)" : "translateX(100%)" }}
 >
 
         <ul className="flex flex-col gap-4">

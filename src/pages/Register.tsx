@@ -4,18 +4,38 @@ import {
   EyeClosed,
   Lock,
   Mail,
+  MapPin,
   Phone,
   User,
 } from "lucide-react";
 import { useState } from "react";
 import Button from "../components/ui/Button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Input from "../components/Form/Input/Input";
 import { registerSchema, registerType } from "../validations/registerSchema";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { actAuthRegister } from "../store/auth/authSlice";
+import { useAppDispatch } from "../store/hooks";
+
+
+interface FormValues {
+  firstName: string;
+  lastName: string;
+  email: string;
+  companyName: string;
+  country: string; 
+  phoneNumber: string;
+  password: string;
+  confirmPassword: string
+}
+
 
 const Register = () => {
+  const dispatch = useAppDispatch();
+
+  const navigate = useNavigate();
+
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
 
@@ -30,6 +50,26 @@ const Register = () => {
 
   const onSubmit: SubmitHandler<registerType> = (data) => {
     console.log(data);
+
+    dispatch(
+      actAuthRegister({
+        contactName: data.firstName,
+        lastName: data.lastName,
+        Email: data.email,
+        companyName: data.companyName,
+        country: data.country,
+        phoneNumber: data.phoneNumber,
+        password: data.password,
+      })
+    ).unwrap()
+    .then(() => {
+      navigate("/VerifyYourAccount", {
+        state: {email: data.email}
+      });
+    }).catch((err) => {
+      console.log(err);
+    })
+
   };
 
   return (
@@ -112,6 +152,20 @@ const Register = () => {
             />
           </div>
 
+          {/* country */}
+          <div className="country">
+            <Input
+              label="Country"
+              name="country"
+              type="text"
+              placeholder="Your Country"
+              register={register}
+              icon={<MapPin size={16} className="text-color-text-2" />}
+              error={errors.phoneNumber?.message}
+            />
+          </div>
+
+
           {/* Password Field */}
           <div className="password relative">
             <Input
@@ -166,7 +220,9 @@ const Register = () => {
           <div className="text-center text-sm">
             Already have an account?
             <span className="font-medium text-cyan-500 cursor-pointer">
-              <Link to={"/login"}>Login</Link>
+              <Link to={"/login"}>
+              Login
+              </Link>
             </span>
           </div>
         </form>
