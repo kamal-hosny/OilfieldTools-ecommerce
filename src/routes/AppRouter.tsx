@@ -15,6 +15,7 @@ import VerifyYourAccount from "../pages/VerifyYourAccount";
 // pages
 const Home = lazy(() => import("../pages/Home"));
 const Products = lazy(() => import("../pages/Products"));
+const SingleProduct = lazy(() => import("../pages/SingleProduct"));
 const Wishlist = lazy(() => import("../pages/Wishlist"));
 const Login = lazy(() => import("../pages/Login"));
 const Register = lazy(() => import("../pages/Register"));
@@ -23,32 +24,32 @@ const VerifyYourEmail = lazy(() => import("../pages/ForgotPassword/VerifyYourEma
 const CreateNewPassword = lazy(() => import("../pages/ForgotPassword/CreateNewPassword"));
 
 const AppRouter = () => {
-
   const dispatch = useDispatch<AppDispatch>();
+
   useEffect(() => {
-    const handleResize  = () => {
-      dispatch(checkMobileWidth())
-    }
+    const handleResize = () => {
+      dispatch(checkMobileWidth());
+    };
 
     window.addEventListener("resize", handleResize);
-    dispatch(checkMobileWidth())
+    dispatch(checkMobileWidth());
 
     return () => {
-      window.removeEventListener("resize", handleResize)
-    }
-
-  }, [dispatch])
-
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [dispatch]);
 
   const router = createBrowserRouter([
     {
       path: "/",
       element: (
-        <Suspense fallback={
-          <div className="relative login bg-section-color w-screen h-[calc(100vh-65px)] flex justify-center items-center">
-            <LottieHandler type="loading" message="Loading please wait..." />
-          </div>
-        }>
+        <Suspense
+          fallback={
+            <div className="relative login bg-section-color w-screen h-[calc(100vh-65px)] flex justify-center items-center">
+              <LottieHandler type="loading" message="Loading please wait..." />
+            </div>
+          }
+        >
           <MainLayout />
         </Suspense>
       ),
@@ -67,6 +68,14 @@ const AppRouter = () => {
           element: (
             <PageSuspenseFallback>
               <Products />
+            </PageSuspenseFallback>
+          ),
+        },
+        {
+          path: "singleProduct/:id",
+          element: (
+            <PageSuspenseFallback>
+              <SingleProduct />
             </PageSuspenseFallback>
           ),
         },
@@ -119,7 +128,7 @@ const AppRouter = () => {
           ),
         },
         {
-          path: "VerifyYourEmail",
+          path: "verifyYourEmail",
           element: (
             <PageSuspenseFallback>
               <VerifyYourEmail />
@@ -127,7 +136,7 @@ const AppRouter = () => {
           ),
         },
         {
-          path: "VerifyYourAccount",
+          path: "verifyYourAccount",
           element: (
             <PageSuspenseFallback>
               <VerifyYourAccount />
@@ -135,7 +144,7 @@ const AppRouter = () => {
           ),
         },
         {
-          path: "CreateNewPassword",
+          path: "createNewPassword",
           element: (
             <PageSuspenseFallback>
               <CreateNewPassword />

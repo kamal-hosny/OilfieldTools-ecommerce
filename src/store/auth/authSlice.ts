@@ -3,8 +3,10 @@ import { TLoading } from "../../types/TLoading";
 import actAuthLogin from "./act/actAuthLogin";
 import { isString } from "../../types";
 import actAuthRegister from "./act/actAuthRegister";
-import actAuthResendEmail from "./act/ResendEmail";
-import actAuthVerifyEmail from "./act/VerifyEmail";
+import actAuthResendEmail from "./act/actAuthResendEmail";
+import actAuthVerifyEmail from "./act/actAuthVerifyEmail";
+import actAuthRestPassword from "./act/actAuthRestPassword";
+import actAuthChangePassword from "./act/actAuthChangePassword";
 
 interface IAuthState {
     test: {
@@ -29,6 +31,7 @@ const initialState: IAuthState = {
     message: null,
     loading: "idle",
     error: null,
+    isVerified: null,
 };
 
 
@@ -114,9 +117,43 @@ const authSlice = createSlice({
                 state.error = action.payload;
             }
         })
+
+        //actAuthRestPassword
+        builder.addCase(actAuthRestPassword.pending, (state) => {
+            state.loading = "pending"
+            state.error = null;
+        })
+        builder.addCase(actAuthRestPassword.fulfilled, (state, action) => {
+            state.loading = "succeeded"
+            state.message = action.payload.message
+        })
+        builder.addCase(actAuthRestPassword.rejected, (state, action) =>{
+            state.loading = "failed";
+            if(isString(action.payload)) {
+                state.error = action.payload;
+            }
+        })
+
+        //actAuthChangePassword
+        builder.addCase(actAuthChangePassword.pending, (state) => {
+            state.loading = "pending"
+            state.error = null;
+        })
+        builder.addCase(actAuthChangePassword.fulfilled, (state, action) => {
+            state.loading = "succeeded"
+            state.message = action.payload.message
+        })
+        builder.addCase(actAuthChangePassword.rejected, (state, action) =>{
+            state.loading = "failed";
+            if(isString(action.payload)) {
+                state.error = action.payload;
+            }
+        })
+
+
     }
 })
 
-export { actAuthLogin, actAuthRegister, actAuthResendEmail, actAuthVerifyEmail }
+export { actAuthLogin, actAuthRegister, actAuthResendEmail, actAuthVerifyEmail, actAuthRestPassword, actAuthChangePassword }
 export const { resetUI, authLogout } = authSlice.actions;
 export default authSlice.reducer;

@@ -1,10 +1,11 @@
 import { combineReducers } from "@reduxjs/toolkit";
+import { persistReducer } from "redux-persist";
+import storage from "redux-persist/lib/storage";
+import auth from "./auth/authSlice";
 import darkModeReducer from "./features/darkMode/darkModeSlice";
 import menuReducer from "./features/menu/menuSlice";
 import mobileWidthReducer from "./features/mobileWidth/mobileWidthSlice";
-import storage from "redux-persist/lib/storage";
-import { persistReducer } from "redux-persist";
-import auth from "./auth/authSlice";
+import productsReducer from "./products/productsSlice";
 
 const authPersistConfig = {
     key: "auth",
@@ -15,6 +16,7 @@ const authPersistConfig = {
 
 const rootReducer = combineReducers({
     auth: persistReducer(authPersistConfig, auth),
+    products: productsReducer,
     darkMode: darkModeReducer,
     menu: menuReducer,
     mobileWidth:  mobileWidthReducer

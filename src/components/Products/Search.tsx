@@ -1,12 +1,25 @@
-import Button from "../ui/Button"
+import { memo } from "react";
 
-const Search = () => {
+interface ISearch {
+  searchTerm: string | null;
+   setSearchTerm: React.Dispatch<React.SetStateAction<string | null>> ;
+  }
+
+const Search = memo(({searchTerm, setSearchTerm} : ISearch) => {
+
+
+  
   return (
     <div className="search flex">
-    <input type="text" className="w-full rounded-s bg-section-color border-2 text-color-text-1 border-color-border focus:ring-2 focus:border-cyan-500 focus:outline-none px-2" placeholder="Search" />
-    <Button className=" text-main-color-background rounded-s-none bg-button-color hover:button-hover-color ">Search</Button>
-  </div>
-  )
-}
+      <input
+        type="text"
+        className="w-full rounded-s py-1 bg-section-color border-2 text-color-text-1 border-color-border focus:ring-2 focus:border-cyan-500 focus:outline-none px-2"
+        placeholder="Search"
+        value={searchTerm || ""}
+        onChange={(e) => setSearchTerm(e.target.value)} // تحديث الحالة عند الكتابة
+      />
+    </div>
+  );
+});
 
-export default Search
+export default memo(Search);

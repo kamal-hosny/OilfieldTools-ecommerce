@@ -33,7 +33,6 @@ interface FormValues {
 
 const Register = () => {
   const dispatch = useAppDispatch();
-
   const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = useState<boolean>(false);

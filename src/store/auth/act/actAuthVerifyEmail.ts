@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { axiosErrorHandler } from "../../../utils/index.js";
 
-import { axiosConfig } from "../../../services/axios-global.js";
+import { axiosConfig } from "../../../services/axiosConfig";
 
 type TVerify = {
     Email: string;

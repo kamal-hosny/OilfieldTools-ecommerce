@@ -1,11 +1,53 @@
 import { useState } from "react";
 import { Mail, Lock, Eye, EyeClosed } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Button from "../../components/ui/Button";
+import { useAppDispatch } from "../../store/hooks";
+import { createNewPasswordSchema, createNewPasswordType } from "../../validations/createNewPasswordSchema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { SubmitHandler, useForm } from "react-hook-form";
+import Input from "../../components/Form/Input/Input";
+import { actAuthChangePassword } from "../../store/auth/authSlice";
 
 const CreateNewPassword = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
+  
+  const location = useLocation();
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const { Email, otp } = location.state || {};
+
+  console.log(Email, otp);
+  
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<createNewPasswordType>({
+    mode: "onBlur",
+    resolver: zodResolver(createNewPasswordSchema),
+  });
+
+  const onSubmit:SubmitHandler<createNewPasswordType> = (data) => {
+    console.log(data);
+    dispatch(actAuthChangePassword(
+      {
+      Email: Email,
+      otp: otp,
+      password: data.password,
+      }
+    )).unwrap().then(() => {
+      navigate("/");
+      console.log("done");
+      
+  }).catch((err) =>{
+      console.log(err);
+      
+    })
+  }
+
 
   return (
     <div className="relative bg-section-color w-screen h-[calc(100vh-65px)] flex justify-center items-center">
@@ -16,52 +58,58 @@ const CreateNewPassword = () => {
           Your New Password Must Be Differnt form Previously Used Password
         </p>
       </div>
-      <form className="text-color-text-1 space-y-4">
+      <form  onSubmit={handleSubmit(onSubmit)} className="text-color-text-1 space-y-4">
         {/* Password and Confirm Password */}
-        <div className="flex flex-col gap-2 ">
-          <div className="flex flex-col gap-1.5">
-            <label htmlFor="password">Password</label>
-            <div className="relative text-color-text-2">
-              <input
-                type={showPassword ? "text" : "password"}
-                id="password"
-                className="ps-8 p-2 bg-section-color text-sm w-full border border-color-border rounded"
-                placeholder="Password"
-              />
-              <Lock size={16} className="absolute top-1/2 -translate-y-1/2 start-2" />
-              <div
-                className="absolute top-1/2 -translate-y-1/2 end-2 w-fit cursor-pointer"
-                onClick={() => setShowPassword((prev) => !prev)}
-              >
-                {showPassword ? <Eye size={18} /> : <EyeClosed size={18} />}
-              </div>
+  {/* Password Field */}
+  <div className="password relative">
+            <Input
+              label="Password"
+              name="password"
+              type={showPassword ? "text" : "password"}
+              placeholder="Enter your Password"
+              register={register}
+              icon={<Lock size={16} className="text-color-text-2" />}
+              error={errors.password?.message}
+            />
+            <div
+              className="show-password absolute bottom-[10px] right-2 w-fit cursor-pointer text-color-text-2"
+              onClick={() => setShowPassword((prev) => !prev)}
+            >
+              {showPassword ? <Eye size={18} /> : <EyeClosed size={18} />}
             </div>
           </div>
-          <div className="flex flex-col gap-1.5">
-            <label htmlFor="confirmPassword">Confirm Password</label>
-            <div className="relative text-color-text-2">
-              <input
-                type={showConfirmPassword ? "text" : "password"}
-                id="confirmPassword"
-                className="ps-8 p-2 bg-section-color text-sm w-full border border-color-border rounded"
-                placeholder="Confirm Password"
-              />
-              <Lock size={16} className="absolute top-1/2 -translate-y-1/2 start-2" />
-              <div
-                className="absolute top-1/2 -translate-y-1/2 end-2 w-fit cursor-pointer"
-                onClick={() => setShowConfirmPassword((prev) => !prev)}
-              >
-                {showConfirmPassword ? <Eye size={18} /> : <EyeClosed size={18} />}
-              </div>
+
+          {/* Confirm Password Field */}
+          <div className="confirmPassword relative">
+            <Input
+              label="Confirm Password"
+              name="confirmPassword"
+              type={showConfirmPassword ? "text" : "password"}
+              placeholder="Confirm your Password"
+              register={register}
+              icon={<Lock size={16} className="text-color-text-2" />}
+              error={errors.confirmPassword?.message}
+            />
+            <div
+              className="show-password absolute bottom-[10px] right-2 w-fit cursor-pointer text-color-text-2"
+              onClick={() => setShowConfirmPassword((prev) => !prev)}
+            >
+              {showConfirmPassword ? <Eye size={18} /> : <EyeClosed size={18} />}
             </div>
           </div>
-        </div>
+
         {/* Submit Button */}
-        <div>
-          <Button className="bg-button-color hover:bg-button-hover-color w-full text-main-color-background font-semibold">
-            Save
-          </Button>
-        </div>
+        <div className="btn">
+            <Button
+              type="submit"
+              disabled={isSubmitting}
+              className={`bg-button-color hover:bg-button-hover-color w-full text-main-color-background font-semibold ${
+                isSubmitting ? "opacity-50 cursor-not-allowed" : ""
+              }`}
+            >
+              {isSubmitting ? "Saveing..." : "Save"}
+            </Button>
+          </div>
       </form>
     </div>
   </div>

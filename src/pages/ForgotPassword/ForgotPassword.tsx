@@ -1,8 +1,47 @@
-import { Link } from 'react-router-dom';
-import Button from '../../components/ui/Button'
-import { Mail } from 'lucide-react'
+import { Link, useNavigate } from "react-router-dom";
+import Button from "../../components/ui/Button";
+import { Mail } from "lucide-react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import {
+  forgotPasswordSchema,
+  forgotPasswordType,
+} from "../../validations/forgotPasswordSchema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import Input from "../../components/Form/Input/Input";
+import { useAppDispatch } from "../../store/hooks";
+import { actAuthRestPassword } from "../../store/auth/authSlice";
 
 const ForgotPassword = () => {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<forgotPasswordType>({
+    mode: "onBlur",
+    resolver: zodResolver(forgotPasswordSchema),
+  });
+
+  const onSubmit: SubmitHandler<forgotPasswordType> = (data) => {
+    dispatch(
+      actAuthRestPassword({
+        Email: data.email,
+      })
+    )
+      .unwrap()
+      .then(() => {
+        console.log("done");
+        navigate("/VerifyYourEmail", {
+          state: { email: data.email },
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <div className="relative forgot-password bg-section-color w-screen h-[calc(100vh-65px)] flex justify-center items-center">
       <div className="p-4 bg-main-color-background rounded space-y-4 w-96 shadow">
@@ -14,31 +53,33 @@ const ForgotPassword = () => {
             Enter your email address below to receive a password reset link.
           </p>
         </div>
-        <form className="text-color-text-1 space-y-4">
-          <div className="email flex flex-col gap-1.5">
-            <label htmlFor="email" className="text-sm">
-              Email Address
-            </label>
-
-            <div className="relative text-color-text-2">
-              <input
-                type="email"
-                id="email"
-                className="ps-8 p-2 bg-section-color text-sm w-full border border-color-border rounded"
-                placeholder="Enter your email"
-              />
-              <Mail
-                size={16}
-                className="absolute top-1/2 -translate-y-1/2 start-2"
-              />
-            </div>
+        <form
+          className="text-color-text-1 space-y-4"
+          onSubmit={handleSubmit(onSubmit)}
+        >
+          {/* Email Field */}
+          <div className="email relative">
+            <Input
+              label="Email"
+              name="email"
+              type="email"
+              placeholder="Enter your Email"
+              register={register}
+              icon={<Mail size={16} className="text-color-text-2" />}
+              error={errors.email?.message}
+              aria-label="Email Address"
+            />
           </div>
 
           <div className="btn">
-            <Button className="bg-button-color hover:bg-button-hover-color w-full text-main-color-background font-semibold">
-              <Link to={"/VerifyYourEmail"}>
-              Send Reset Link
-              </Link>
+            <Button
+              type="submit"
+              disabled={isSubmitting}
+              className={`bg-button-color hover:bg-button-hover-color w-full text-main-color-background font-semibold ${
+                isSubmitting ? "opacity-50 cursor-not-allowed" : ""
+              }`}
+            >
+              {isSubmitting ? "Sending..." : "Send Reset Link"}
             </Button>
           </div>
         </form>

@@ -4,41 +4,49 @@ import Button from "../../ui/Button";
 import Img from "../../ui/Img";
 import { useState } from "react";
 import { textSlicer } from "../../../utils";
+import { TProduct } from "../../../types";
+import { useNavigate } from "react-router-dom";
 
 interface IProductCard {
-  title: string,
-  price: number,
-  instock: boolean,
-  description: string,
-  imageUrl: string,
+  productData: TProduct
   grid?: boolean,
 }
 
 
 const ProductCard = ({
-  title,
-  price,
-  instock,
-  description,
-  imageUrl,
+  productData,
   grid = true,
 }: IProductCard) => {
+  const navigate = useNavigate();
+
   const [isHeartFilled, setIsHeartFilled] = useState(false);
 
   const toggleHeart = () => {
     setIsHeartFilled((prev) => !prev);
   };
 
+  const { _id, mainImg, data } = productData ?? {} 
+const { originalname, url } = mainImg ?? {}
+  const { product_name, price, description, instock, material_Category } = data ?? {}
+
+  const navigateToSingle = (id: string) => navigate(`/singleProduct/${id}`);
+
+  const defaultImg = "https://dummyimage.com/200x200";
+  
   return (
     <>
       {grid ? (
-        <div className="flex flex-col max-w-[402px] max-sm:w-full gap-3 justify-center items-start p-4 border-color-border border rounded-md shadow">
+        <div id={_id} className="flex flex-col max-w-[402px] max-sm:w-full gap-3 justify-center items-start p-4 border-color-border border rounded-md shadow bg-main-color-background">
           {/* Image Section */}
+
           <div className="relative image w-full h-56 rounded-md border-color-border border overflow-hidden">
             <Img
+            onClick={()=>{
+              navigateToSingle(_id)
+            }}
               className="rounded-md cursor-pointer w-full h-full object-cover hover:scale-110 transition-all"
-              src={imageUrl}
-              alt={title}
+              src={url || defaultImg}
+              alt={originalname || "img"}
             />
             <Heart
               onClick={toggleHeart}
@@ -52,9 +60,9 @@ const ProductCard = ({
           {/* Body Section */}
           <div className="body space-y-3">
             <div className="space-y-1.5">
-              <p className="title text-color-text-1 text-base capitalize font-medium">{title}</p>
+              <p className="title text-color-text-1 text-base capitalize font-medium">{product_name || ""}</p>
               <p className="description text-color-text-2 text-xs font-semibold w-max whitespace-normal break-words">
-                {textSlicer(description)}
+                {textSlicer(description || "")}
               </p>
             </div>
           </div>
@@ -63,7 +71,7 @@ const ProductCard = ({
           <div className="footer flex w-full justify-between items-end">
             <div className="price">
               <p className="text-color-text-2">Price</p>
-              <span className="text-color-text-1 text-xl font-medium">{formatCurrency(price)}</span>
+              <span className="text-color-text-1 text-xl font-medium">{formatCurrency(price || 0)}</span>
             </div>
             <Button
               className="border-button-color border-2 text-xs text-color-text-1 hover:bg-button-hover-color hover:text-main-color-background"
@@ -75,11 +83,14 @@ const ProductCard = ({
   
           {/* Tags Section */}
           <ul className="flex justify-start items-start flex-wrap gap-2">
-            <li className="rounded-full py-1 px-2 border-2 text-color-text-2 border-color-border bg-section-color text-xs cursor-pointer">
-              Electrical
-            </li>
+            {material_Category && (
+           <li className="rounded-full py-1 px-2 border-2 text-color-text-2 border-color-border bg-section-color text-xs cursor-pointer">
+           {material_Category}
+         </li>
+            )}
+ 
             <li className="rounded-full py-1 px-2 border-2 text-color-text-2 border-color-border bg-section-color text-xs">
-              {instock ? "In Stock" : "Out of Stock"}
+              {instock || 0 > 0 ? "In Stock" : "Out of Stock"}
             </li>
           </ul>
         </div>
@@ -89,8 +100,8 @@ const ProductCard = ({
           <div className="relative image h-52 w-52 rounded-md border-color-border border overflow-hidden">
             <Img
               className="rounded-md cursor-pointer h-full w-full object-cover hover:scale-110 transition-all"
-              src={imageUrl}
-              alt={title}
+              src={url || defaultImg}
+              alt={originalname || "img"}
             />
             <Heart
               onClick={toggleHeart}
@@ -104,9 +115,9 @@ const ProductCard = ({
           {/* Body Section */}
           <div className="body space-y-3 flex-1">
             <div className="space-y-1.5">
-              <p className="title text-color-text-1 text-base capitalize font-medium">{title}</p>
+              <p className="title text-color-text-1 text-base capitalize font-medium">{product_name || ""}</p>
               <p className="description text-color-text-2 text-xs font-semibold w-full break-words whitespace-normal">
-  {textSlicer(description)}
+  {textSlicer(description || "")}
 </p>
 
             </div>
@@ -116,7 +127,7 @@ const ProductCard = ({
         <div className="footer flex border-s-2 px-4  border-color-border h-full w-60 flex-col justify-start gap-4">
             <div className="price">
               <p className="text-color-text-2 font-medium">Price</p>
-              <span className="text-color-text-1 text-xl font-medium">{formatCurrency(price)}</span>
+              <span className="text-color-text-1 text-xl font-medium">{formatCurrency(price || 0)}</span>
             </div>
             <div className="btn space-y-2">
             <Button

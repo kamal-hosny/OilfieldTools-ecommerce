@@ -1,7 +1,16 @@
 import React, { useRef } from "react";
 import Button from "../../components/ui/Button";
+import { useAppDispatch } from "../../store/hooks";
+import { useLocation, useNavigate } from "react-router-dom";
+import { actAuthResendEmail, actAuthVerifyEmail } from "../../store/auth/authSlice";
 
 const VerifyYourEmail = () => {
+
+  const dispatch = useAppDispatch()
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { email } = location.state || {};
+
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
   
 
@@ -25,8 +34,42 @@ const VerifyYourEmail = () => {
   const handleVerifyClick = () => {
     const code = inputRefs.current.map((input) => input?.value || "").join("")
 
-    console.log(code);
+    console.log( {
+        Email: email,
+        opt: code,
+    });
+
+    if(email && code ){
+      navigate("/CreateNewPassword", {
+        state:                 {
+          Email: email,
+          otp: code,
+      },
+      });
+      console.log("done");
+    }else{
+        console.log("اكمل المعلومات");
+        
+    }
+   
     
+  }
+
+
+  const handleResendCode = () => {
+    dispatch(
+        actAuthResendEmail(
+            {
+                Email: email
+            }
+        )
+    ).unwrap().then(() => {
+        console.log("done");
+        
+    }).catch((err) =>{
+        console.log(err);
+        
+      })
   }
 
 
@@ -38,7 +81,7 @@ const VerifyYourEmail = () => {
         </h1>
         <p className="text-sm text-center text-color-text-2">
           Please Enter The 4-Digit Code Sent To <br />
-          <span className="font-semibold">your-email@example.com</span>
+          <span className="font-semibold">{email}</span>
         </p>
         <div className="flex justify-center gap-2">
          {[0, 1, 2, 3].map((_, index) => (
@@ -57,7 +100,7 @@ const VerifyYourEmail = () => {
          ))}
         </div>
 
-          <p className="text-cyan-400 hover:text-cyan-600 cursor-pointer text-center">Resend Code</p>
+        <p onClick={handleResendCode} className="text-cyan-400 hover:text-cyan-600 cursor-pointer text-center">Resend Code</p>
 
         <Button onClick={()=>{handleVerifyClick()}} className="bg-button-color hover:bg-button-hover-color w-full text-main-color-background font-semibold">
           
