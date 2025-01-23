@@ -2,7 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { axiosConfig } from "../../../services/axiosConfig";  
 import { axiosErrorHandler } from "../../../utils";
 
-export const getOneProduct = createAsyncThunk(
+export const actGetOneProduct = createAsyncThunk(
     "products/getOneProduct", 
     async (id: string, thunkAPI) => {
         const { rejectWithValue } = thunkAPI

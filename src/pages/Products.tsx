@@ -9,33 +9,11 @@ import { useSelector } from "react-redux";
 import { RootState } from "../store";
 import { actGetAllProducts } from "../store/products/productsSlice";
 import { TProductResponse } from "../types";
-import { useAppDispatch } from "../store/hooks";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { actGetAllBrands, actGetAllCategories, actGetAllConditions, actGetAllMaterialCategories } from "../store/query/querySlice";
 
 
 // الفلاتر الافتراضية
-const filters = {
-  category: [
-    { _id: "671016d13d8f58690db0ec12", name: "unknown" },
-    { _id: "6713fbaa92d1cb0e74ad9123", name: "Category 1" },
-    { _id: "6713fbad92d1cb0e74ad9124", name: "Category 2" },
-    { _id: "6713fbb192d1cb0e74ad9125", name: "Category 3" },
-  ],
-  materialCategory: [
-    { _id: "671016d13d8f58690db0ec13", name: "Steel" },
-    { _id: "6713fbaa92d1cb0e74ad9126", name: "Aluminum" },
-    { _id: "6713fbad92d1cb0e74ad9127", name: "Plastic" },
-  ],
-  brand: [
-    { _id: "671016d13d8f58690db0ec14", name: "Brand A" },
-    { _id: "6713fbaa92d1cb0e74ad9128", name: "Brand B" },
-    { _id: "6713fbad92d1cb0e74ad9129", name: "Brand C" },
-  ],
-  condition: [
-    { _id: "671016d13d8f58690db0ec15", name: "New" },
-    { _id: "6713fbaa92d1cb0e74ad9130", name: "Used" },
-    { _id: "6713fbad92d1cb0e74ad9131", name: "Refurbished" },
-  ],
-};
 
 const Products = () => {
   const dispatch = useAppDispatch();
@@ -44,6 +22,7 @@ const Products = () => {
   const [cardGrid, setCardGrid] = useState<boolean>(true);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState<string>("");
+  
   const isMobileWidth = useSelector(
     (state: RootState) => state.mobileWidth.isMobileWidth
   );
@@ -54,7 +33,7 @@ const Products = () => {
 
   const products = useMemo(() => productResponse?.data?.data || [], [productResponse]);
   const meta = useMemo(
-    () => productResponse?.data.meta || { page: 1, limit: 10, last_page: 1 },
+    () => productResponse?.data?.meta || { page: 1, limit: 10, last_page: 1 },
     [productResponse]
   );
 
@@ -69,12 +48,12 @@ const Products = () => {
         category: null,
         brand: null,
         condition: null,// استخدام البحث
-        search: searchTerm, 
-        page: meta.page,
-        limit: meta.limit,
+        search: debouncedSearchTerm, 
+        page: meta?.page,
+        limit: meta?.limit,
       }) as any
     );
-  }, [dispatch, meta.page, meta.limit, debouncedSearchTerm]);
+  }, [dispatch, meta?.page, meta?.limit, debouncedSearchTerm]);
 
     // Update the debounced search term
     useEffect(() => {
@@ -99,6 +78,32 @@ const Products = () => {
     }
   }, [isMobileWidth, cardGrid]);
 
+
+  // Allquery
+const {brandRecords,categoryRecords, conditionRecords, materialCategoryRecords} = useAppSelector((state) => state?.query)
+
+const categoryData = (categoryRecords as any)?.data;
+const brandData = (brandRecords as any)?.data;
+const conditionData = (conditionRecords as any)?.data;
+const materialCategoryData = (materialCategoryRecords as any)?.data;
+
+console.log({
+  brandData
+});
+
+
+const fetchquerys = useCallback(() => {
+  dispatch(actGetAllBrands());
+  dispatch(actGetAllCategories());
+  dispatch(actGetAllConditions());
+  dispatch(actGetAllMaterialCategories());
+}, [dispatch]);
+
+useEffect(() => {
+  fetchquerys();
+}, [fetchquerys]);
+
+
   return (
     <div className="bg-section-color">
       <div className="container mx-auto px-2 py-6 space-y-5">
@@ -111,13 +116,13 @@ const Products = () => {
           {/* قسم الفلاتر */}
           <div className="filtration bg-main-color-background p-4 rounded border-color-border border-2 flex flex-col gap-4 w-72 max-md:hidden">
             <p className="text-cyan-500 font-medium">Filter</p>
-            <Accordion title="Category" list={filters.category} />
+            <Accordion title="Category" list={categoryData} />
             <Accordion
               title="Material Category"
-              list={filters.materialCategory}
+              list={materialCategoryData}
             />
-            <Accordion title="Brand" list={filters.brand} />
-            <Accordion title="Condition" list={filters.condition} />
+            <Accordion title="Brand" list={brandData} />
+            <Accordion title="Condition" list={conditionData} />
             <span className="block bg-color-border h-0.5"></span>
             <p className="text-cyan-500 font-medium">
               Filter By Price <b>(AED)</b>

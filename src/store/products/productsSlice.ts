@@ -1,15 +1,18 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { TLoading, TProductResponse, isString } from "../../types";
+import { TLoading, TProduct, TProductResponse, isString } from "../../types";
 import { actGetAllProducts } from "./act/actGetAllProducts";
+import { actGetOneProduct } from "./act/actGetOneProduct";
 
 interface ProductState {
     records: TProductResponse[] | null | [];
+    record: TProduct | null | {};
     loading: TLoading;
     error: string | null
 }
 
 const initialState: ProductState = {
     records: [],
+    record: null,
     loading: "idle",
     error: null
 }
@@ -33,6 +36,21 @@ const productsSlice = createSlice({
             state.records = action.payload
         })
         builder.addCase(actGetAllProducts.rejected, (state, action) => {
+            state.loading = "failed";
+            if(isString(action.payload)) {
+                state.error = action.payload
+            }
+        })
+        // actGetOneProduct
+        builder.addCase(actGetOneProduct.pending, (state) => {
+            state.loading = "pending";
+            state.error = null ;
+        })
+        builder.addCase(actGetOneProduct.fulfilled, (state, action) => {
+            state.loading = "succeeded";
+            state.record = action.payload
+        })
+        builder.addCase(actGetOneProduct.rejected, (state, action) => {
             state.loading = "failed";
             if(isString(action.payload)) {
                 state.error = action.payload

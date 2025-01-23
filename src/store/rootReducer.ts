@@ -6,6 +6,7 @@ import darkModeReducer from "./features/darkMode/darkModeSlice";
 import menuReducer from "./features/menu/menuSlice";
 import mobileWidthReducer from "./features/mobileWidth/mobileWidthSlice";
 import productsReducer from "./products/productsSlice";
+import queryReducer from "./query/querySlice";
 
 const authPersistConfig = {
     key: "auth",
@@ -17,6 +18,7 @@ const authPersistConfig = {
 const rootReducer = combineReducers({
     auth: persistReducer(authPersistConfig, auth),
     products: productsReducer,
+    query: queryReducer,
     darkMode: darkModeReducer,
     menu: menuReducer,
     mobileWidth:  mobileWidthReducer
