@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Mail, Lock, Eye, EyeClosed } from "lucide-react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Lock, Eye, EyeClosed } from "lucide-react";
+import { useLocation, useNavigate } from "react-router-dom";
 import Button from "../../components/ui/Button";
 import { useAppDispatch } from "../../store/hooks";
 import { createNewPasswordSchema, createNewPasswordType } from "../../validations/createNewPasswordSchema";

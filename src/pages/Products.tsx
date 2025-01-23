@@ -54,9 +54,11 @@ const Products = () => {
 
   const products = useMemo(() => productResponse?.data?.data || [], [productResponse]);
   const meta = useMemo(
-    () => productResponse?.meta || { page: 1, limit: 10, last_page: 1 },
+    () => productResponse?.data.meta || { page: 1, limit: 10, last_page: 1 },
     [productResponse]
   );
+
+  
 
 
   // دالة جلب المنتجات

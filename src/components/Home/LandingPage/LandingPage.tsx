@@ -1,8 +1,7 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
-import "swiper/css";
-// Uncomment the following line if Autoplay CSS is needed
-// import 'swiper/css/autoplay';
+import "swiper/swiper-bundle.css";
+
 
 import Img from "../../ui/Img";
 
@@ -10,8 +9,6 @@ import landingPage1 from "../../../assets/landingPage/LandingPage1.jpg";
 import landingPage2 from "../../../assets/landingPage/LandingPage2.jpg";
 import SearchLanding from "./SearchLanding";
 
-// Uncomment and import if FilterFloating is required
-// import FilterFloating from './FilterFloating/FilterFloating';
 
 const LandingPage = () => {
   return (

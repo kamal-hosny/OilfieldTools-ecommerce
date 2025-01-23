@@ -5,17 +5,17 @@ export type TProduct = {
     price: number | null;
     model_number: string | null;
     category: string | null;
-    dimension: string | null;
-    unit_of_measurement: string | null;
+    Dimension: string | null; 
+    Unit_of_Measurement: string | null; 
     condition: string | null;
     brand: string | null;
     weight: string | null;
     size: string | null;
-    hns_code: string | null;
-    material_Category: string | null;
-    description: string | null;
-    currency: string | null;
-    instock: number | null;
+    HNS_code: string | null; 
+    material_Category: string | null; 
+    instock: string | number | null;
+    Description: string | null; 
+    Currency: string | null;
   };
   mainImg: {
     url: string | null;
@@ -27,14 +27,16 @@ export type TProduct = {
     publicid: string | null;
   }[];
   pdf: string | null;
-  instock: number;
+  instock: number; // هذا حقل إضافي
 };
 
 export type TProductResponse = {
-  data: TProduct[];
-  meta: {
-    page: number;
-    limit: number;
-    last_page: number;
+  data: {
+    data: TProduct[]; 
+    meta: {
+      page: number;
+      limit: number;
+      last_page: number;
+    };
   };
 };

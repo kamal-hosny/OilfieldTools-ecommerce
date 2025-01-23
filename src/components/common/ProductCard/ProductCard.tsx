@@ -27,7 +27,7 @@ const ProductCard = ({
 
   const { _id, mainImg, data } = productData ?? {} 
 const { originalname, url } = mainImg ?? {}
-  const { product_name, price, description, instock, material_Category } = data ?? {}
+  const { product_name, price, Description, instock, material_Category } = data ?? {}
 
   const navigateToSingle = (id: string) => navigate(`/singleProduct/${id}`);
 
@@ -62,7 +62,7 @@ const { originalname, url } = mainImg ?? {}
             <div className="space-y-1.5">
               <p className="title text-color-text-1 text-base capitalize font-medium">{product_name || ""}</p>
               <p className="description text-color-text-2 text-xs font-semibold w-max whitespace-normal break-words">
-                {textSlicer(description || "")}
+                {textSlicer(Description || "")}
               </p>
             </div>
           </div>
@@ -117,7 +117,7 @@ const { originalname, url } = mainImg ?? {}
             <div className="space-y-1.5">
               <p className="title text-color-text-1 text-base capitalize font-medium">{product_name || ""}</p>
               <p className="description text-color-text-2 text-xs font-semibold w-full break-words whitespace-normal">
-  {textSlicer(description || "")}
+  {textSlicer(Description || "")}
 </p>
 
             </div>

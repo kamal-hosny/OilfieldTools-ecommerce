@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 import Button from "../../components/ui/Button";
 import { useAppDispatch } from "../../store/hooks";
 import { useLocation, useNavigate } from "react-router-dom";
-import { actAuthResendEmail, actAuthVerifyEmail } from "../../store/auth/authSlice";
+import { actAuthResendEmail } from "../../store/auth/authSlice";
 
 const VerifyYourEmail = () => {
 

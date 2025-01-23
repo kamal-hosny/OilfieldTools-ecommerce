@@ -19,16 +19,6 @@ import { actAuthRegister } from "../store/auth/authSlice";
 import { useAppDispatch } from "../store/hooks";
 
 
-interface FormValues {
-  firstName: string;
-  lastName: string;
-  email: string;
-  companyName: string;
-  country: string; 
-  phoneNumber: string;
-  password: string;
-  confirmPassword: string
-}
 
 
 const Register = () => {
