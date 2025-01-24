@@ -61,7 +61,7 @@ const SingleProduct = () => {
     return <div>Product not found</div>;
   }
 
-  const { data, imgs, mainImg } = product;
+  const { imgs, mainImg } = product;
   const allImages = [mainImg, ...(Array.isArray(imgs) ? imgs : []), ...(Array.isArray(imgs) ? imgs : [])];
   const images = allImages?.map((img) => img.url) || [];
 
