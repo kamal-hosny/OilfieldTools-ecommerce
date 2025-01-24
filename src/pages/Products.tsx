@@ -1,17 +1,18 @@
-import MainTitle from "../components/common/main/MainTitle";
-import FilterByPrice from "../components/Products/FilterByPrice";
-import Accordion from "../components/Products/Accordion";
-import { useEffect, useMemo, useState, useCallback } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { useSelector } from "react-redux";
+import Breadcrumb from "../components/Products/Breadcrumb";
 import DisplayMethod from "../components/Products/DisplayMethod";
+import { DrawerDefault } from "../components/Products/DrawerDefault";
+import FilterByPrice from "../components/Products/FilterByPrice";
 import Search from "../components/Products/Search";
 import ProductCard from "../components/common/ProductCard/ProductCard";
-import { useSelector } from "react-redux";
+import MainTitle from "../components/common/main/MainTitle";
 import { RootState } from "../store";
+import { useAppDispatch } from "../store/hooks";
 import { actGetAllProducts } from "../store/products/productsSlice";
-import { TProductResponse } from "../types";
-import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { actGetAllBrands, actGetAllCategories, actGetAllConditions, actGetAllMaterialCategories } from "../store/query/querySlice";
-import Breadcrumb from "../components/ui/Breadcrumb";
+import { TProductResponse } from "../types";
+import Pagination from "../components/Products/Pagination";
 
 
 const breadcrumbItems = [
@@ -25,21 +26,37 @@ const Products = () => {
   const [cardGrid, setCardGrid] = useState<boolean>(true);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState<string>("");
+  const [fliterPrice, setFliterPrice] = useState({ from: "", to: "" });
+  const [ pageNumber, setPageNumber ] = useState<number | string | null>(1)
+
+  // filters
+  const [filterValues, setFilterValues] = useState({
+    materialCategory: null,
+    category: null,
+    brand: null,
+    condition: null,
+  });
+
+  const {brand, category, condition, materialCategory} = filterValues
   
+
+
   const isMobileWidth = useSelector(
     (state: RootState) => state.mobileWidth.isMobileWidth
   );
 
   const productResponse = useSelector(
     (state: RootState) => state.products.records
-  ) as TProductResponse | null;
+  ) as TProductResponse | null ;
 
   const products = useMemo(() => productResponse?.data?.data || [], [productResponse]);
-  const meta = useMemo(
-    () => productResponse?.data?.meta || { page: 1, limit: 10, last_page: 1 },
+  const meta  = useMemo(
+    () => productResponse?.meta || { page: 1, limit: 10, last_page: 1 },
     [productResponse]
   );
 
+
+  
   
 
 
@@ -47,16 +64,18 @@ const Products = () => {
   const fetchProducts = useCallback(() => {
     dispatch(
       actGetAllProducts({
-        materialCategory: null,
-        category: null,
-        brand: null,
-        condition: null,// استخدام البحث
+        materialCategory: materialCategory,
+        category: category,
+        brand: brand,
+        condition: condition,
         search: debouncedSearchTerm, 
-        page: meta?.page,
+        page: pageNumber,
         limit: meta?.limit,
+        min: fliterPrice.from,
+        max: fliterPrice.to,
       }) as any
     );
-  }, [dispatch, meta?.page, meta?.limit, debouncedSearchTerm]);
+  }, [dispatch, meta?.page, meta?.limit, debouncedSearchTerm, filterValues, fliterPrice, pageNumber]);
 
     // Update the debounced search term
     useEffect(() => {
@@ -82,17 +101,7 @@ const Products = () => {
   }, [isMobileWidth, cardGrid]);
 
 
-  // Allquery
-const {brandRecords,categoryRecords, conditionRecords, materialCategoryRecords} = useAppSelector((state) => state?.query)
-
-const categoryData = (categoryRecords as any)?.data;
-const brandData = (brandRecords as any)?.data;
-const conditionData = (conditionRecords as any)?.data;
-const materialCategoryData = (materialCategoryRecords as any)?.data;
-
-console.log({
-  brandData
-});
+  // get Allquery
 
 
 const fetchquerys = useCallback(() => {
@@ -101,6 +110,10 @@ const fetchquerys = useCallback(() => {
   dispatch(actGetAllConditions());
   dispatch(actGetAllMaterialCategories());
 }, [dispatch]);
+
+useEffect(() => {
+  setPageNumber(1);
+}, [debouncedSearchTerm, filterValues, setPageNumber]);
 
 useEffect(() => {
   fetchquerys();
@@ -120,18 +133,19 @@ useEffect(() => {
           {/* قسم الفلاتر */}
           <div className="filtration bg-main-color-background p-4 rounded border-color-border border-2 flex flex-col gap-4 w-72 max-md:hidden">
             <p className="text-cyan-500 font-medium">Filter</p>
-            <Accordion title="Category" list={categoryData} />
+            <DrawerDefault filterValues={filterValues} setFilterValues={setFilterValues} />
+            {/* <Accordion title="Category" list={categoryData} />
             <Accordion
               title="Material Category"
               list={materialCategoryData}
             />
             <Accordion title="Brand" list={brandData} />
-            <Accordion title="Condition" list={conditionData} />
+            <Accordion title="Condition" list={conditionData} /> */}
             <span className="block bg-color-border h-0.5"></span>
             <p className="text-cyan-500 font-medium">
               Filter By Price <b>(AED)</b>
             </p>
-            <FilterByPrice />
+            <FilterByPrice  fliterPrice={fliterPrice} setFliterPrice={setFliterPrice} />
           </div>
           {/* قسم المنتجات */}
           <div className="products w-full bg-main-color-background border-2 border-color-border flex flex-col gap-4 p-2">
@@ -168,8 +182,12 @@ useEffect(() => {
                 ))}
               </div>
             </div>
+            <div className="pagination">
+          <Pagination lastPage={meta?.last_page} currentPage={pageNumber} setCurrentPage={setPageNumber} />
+        </div>
           </div>
         </div>
+
       </div>
     </div>
   );

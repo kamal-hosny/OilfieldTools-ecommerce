@@ -1,18 +1,18 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
-import { actGetOneProduct } from "../store/products/act/actGetOneProduct";
-import { useAppDispatch, useAppSelector } from "../store/hooks";
 import Img from "../components/ui/Img";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { actGetOneProduct } from "../store/products/act/actGetOneProduct";
 
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation } from "swiper/modules";
-import "swiper/swiper-bundle.css";
 import { ArrowBigLeftDash, ArrowBigRightDash, Heart } from "lucide-react";
-import { TProduct } from "../types";
-import { cleanUpProductsRecords } from "../store/products/productsSlice";
-import { formatCurrency } from "../utils";
+import { Navigation } from "swiper/modules";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/swiper-bundle.css";
+import Breadcrumb from "../components/Products/Breadcrumb";
 import Button from "../components/ui/Button";
-import Breadcrumb from "../components/ui/Breadcrumb";
+import { cleanUpProductsRecords } from "../store/products/productsSlice";
+import { TProduct } from "../types";
+import { formatCurrency } from "../utils";
 
 
 const breadcrumbItems = [

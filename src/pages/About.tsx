@@ -1,5 +1,5 @@
 import { Banner, OurAchievements, OurJourney, OurValues } from "../components/About";
-import Breadcrumb from "../components/ui/Breadcrumb";
+import Breadcrumb from "../components/Products/Breadcrumb";
 
 const breadcrumbItems = [
   { label: "Home", link: "/" },

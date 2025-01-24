@@ -1,11 +1,25 @@
 import { useState } from "react";
+import { string } from "zod";
 
-const FilterByPrice = () => {
-  const [price, setPrice] = useState({ from: "", to: "" });
+interface IProps  {
+  fliterPrice: {
+    from: string;
+    to: string;
+  }
+   setFliterPrice : React.Dispatch<
+   React.SetStateAction<{
+    from: string;
+    to: string;
+   }>
+ >;
+}
+
+const FilterByPrice = ({ fliterPrice, setFliterPrice }: IProps) => {
+  
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
-    setPrice((prev) => ({
+    setFliterPrice((prev) => ({
       ...prev,
       [id]: value,
     }));
@@ -21,7 +35,7 @@ const FilterByPrice = () => {
           type="number"
           min={0}
           id="from"
-          value={price.from}
+          value={fliterPrice.from}
           onChange={handleChange}
           placeholder="0"
           className="p-2 bg-section-color text-sm w-full border border-color-border rounded placeholder-color-text-2 text-color-text-1 focus:ring-2 focus:ring-cyan-500 focus:outline-none"
@@ -35,7 +49,7 @@ const FilterByPrice = () => {
           type="number"
           id="to"
           min={0}
-          value={price.to}
+          value={fliterPrice.to}
           onChange={handleChange}
           placeholder="99999"
           className="p-2 bg-section-color text-sm w-full border border-color-border rounded placeholder-color-text-2 text-color-text-1 focus:ring-2 focus:ring-cyan-500 focus:outline-none"

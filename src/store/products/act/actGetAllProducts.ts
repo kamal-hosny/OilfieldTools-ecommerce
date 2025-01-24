@@ -13,6 +13,8 @@ type TQueryData = {
   search?: string | null;
   page?: string | number | null;
   limit?: string | number | null;
+  min?: string | number | null;
+  max?: string | number | null;
 };
 
 
@@ -37,6 +39,8 @@ export const actGetAllProducts = createAsyncThunk(
       if (data.search) query += `search=${encodeURIComponent(data.search)}&`;
       if (data.page) query += `page=${encodeURIComponent(data.page)}&`;
       if (data.limit) query += `limit=${encodeURIComponent(data.limit) || '10'}&`;
+      if (data.min) query += `min=${encodeURIComponent(data.min) || '0'}&`;
+      if (data.max) query += `max=${encodeURIComponent(data.max) || '99999'}&`;
 
       // Remove trailing '&' or '?' if no query parameters were added
       query = query.endsWith('&') ? query.slice(0, -1) : query;

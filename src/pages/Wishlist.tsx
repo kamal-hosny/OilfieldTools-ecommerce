@@ -1,6 +1,6 @@
 // import ProductCard from "../components/common/ProductCard/ProductCard"
-import MainTitle from "../components/common/main/MainTitle"
-import Breadcrumb from "../components/ui/Breadcrumb"
+import MainTitle from "../components/common/main/MainTitle";
+import Breadcrumb from "../components/Products/Breadcrumb";
 
 // const products = [
 //   {
