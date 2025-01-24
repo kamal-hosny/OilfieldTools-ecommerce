@@ -8,6 +8,9 @@ export const actGetOneProduct = createAsyncThunk(
         const { rejectWithValue } = thunkAPI
         try {
             const response = await axiosConfig.get(`proudect/${id}?`);
+            
+            console.log(response);
+            
             return response.data;
         } catch (error) {
             return rejectWithValue(axiosErrorHandler(error));
