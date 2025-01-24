@@ -12,6 +12,13 @@ import { TProduct } from "../types";
 import { cleanUpProductsRecords } from "../store/products/productsSlice";
 import { formatCurrency } from "../utils";
 import Button from "../components/ui/Button";
+import Breadcrumb from "../components/ui/Breadcrumb";
+
+
+const breadcrumbItems = [
+  { label: "Home", link: "/" },
+  { label: "Products", link: "/products" },
+];
 
 interface IProductResponse {
   data: TProduct;
@@ -68,7 +75,7 @@ const SingleProduct = () => {
   return (
     <div>
       <div className="container mx-auto px-2 py-6 space-y-5 bg-section-color">
-        <div>{product?.data?.product_name}</div>
+        <Breadcrumb items={breadcrumbItems} itemNow={product?.data?.product_name} />
         <div className="productPage flex justify-between max-md:flex-col">
           <div className="imageSection flex-1 flex justify-end">
             <div className="w-96 max-md:w-full space-y-2">

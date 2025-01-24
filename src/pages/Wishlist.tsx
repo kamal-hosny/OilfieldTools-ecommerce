@@ -1,5 +1,6 @@
 // import ProductCard from "../components/common/ProductCard/ProductCard"
 import MainTitle from "../components/common/main/MainTitle"
+import Breadcrumb from "../components/ui/Breadcrumb"
 
 // const products = [
 //   {
@@ -94,10 +95,15 @@ import MainTitle from "../components/common/main/MainTitle"
 //   },
 // ];
 
+const breadcrumbItems = [
+  { label: "Home", link: "/" },
+];
+
 const Wishlist = () => {
   return (
     <div className="bg-section-color">
       <div className="container mx-auto px-2 py-6 space-y-5">
+      <Breadcrumb items={breadcrumbItems} itemNow={"Wishlist"} />
         <MainTitle title="Wishlist">
           Explore a wide range of high-quality materials and tools essential for the oilfield industry.  
           From drilling equipment to maintenance tools, we provide everything you need to ensure efficient operations.

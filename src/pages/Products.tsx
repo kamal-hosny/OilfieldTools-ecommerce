@@ -11,9 +11,12 @@ import { actGetAllProducts } from "../store/products/productsSlice";
 import { TProductResponse } from "../types";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { actGetAllBrands, actGetAllCategories, actGetAllConditions, actGetAllMaterialCategories } from "../store/query/querySlice";
+import Breadcrumb from "../components/ui/Breadcrumb";
 
 
-// الفلاتر الافتراضية
+const breadcrumbItems = [
+  { label: "Home", link: "/" },
+];
 
 const Products = () => {
   const dispatch = useAppDispatch();
@@ -107,6 +110,7 @@ useEffect(() => {
   return (
     <div className="bg-section-color">
       <div className="container mx-auto px-2 py-6 space-y-5">
+      <Breadcrumb items={breadcrumbItems} itemNow={"Products"} />
         <MainTitle title="Oilfield Products">
           Discover high-quality materials and tools essential for the oilfield
           industry. From drilling equipment to maintenance tools, we provide
