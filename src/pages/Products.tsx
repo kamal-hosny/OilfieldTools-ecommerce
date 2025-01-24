@@ -27,10 +27,14 @@ const Products = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState<string>("");
   const [fliterPrice, setFliterPrice] = useState({ from: "", to: "" });
-  const [ pageNumber, setPageNumber ] = useState<number | string | null>(1)
-
+  const [pageNumber, setPageNumber] = useState<number | null>(1);
   // filters
-  const [filterValues, setFilterValues] = useState({
+  const [filterValues, setFilterValues] = useState<{
+    materialCategory: string | null;
+    category: string | null;
+    brand: string | null;
+    condition: string | null;
+  }>({
     materialCategory: null,
     category: null,
     brand: null,
@@ -51,7 +55,7 @@ const Products = () => {
 
   const products = useMemo(() => productResponse?.data?.data || [], [productResponse]);
   const meta  = useMemo(
-    () => productResponse?.meta || { page: 1, limit: 10, last_page: 1 },
+    () => productResponse?.meta || { page: 1, limit: 3, last_page: 1 },
     [productResponse]
   );
 

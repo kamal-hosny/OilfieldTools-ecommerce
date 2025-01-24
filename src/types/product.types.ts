@@ -33,10 +33,11 @@ export type TProduct = {
 export type TProductResponse = {
   data: {
     data: TProduct[]; 
-    meta: {
-      page: number;
-      limit: number;
-      last_page: number;
-    };
+    
+  };
+  meta: {
+    page: number;
+    limit: number;
+    last_page: number;
   };
 };
