@@ -13,7 +13,7 @@ import { actGetAllProducts } from "../store/products/productsSlice";
 import { actGetAllBrands, actGetAllCategories, actGetAllConditions, actGetAllMaterialCategories } from "../store/query/querySlice";
 import { TProductResponse } from "../types";
 import Pagination from "../components/Products/Pagination";
-
+import LimitSelector from "../components/Products/LimitSelector";
 
 const breadcrumbItems = [
   { label: "Home", link: "/" },
@@ -22,13 +22,15 @@ const breadcrumbItems = [
 const Products = () => {
   const dispatch = useAppDispatch();
 
-  // إدارة الحالة
+  // State management
   const [cardGrid, setCardGrid] = useState<boolean>(true);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState<string>("");
-  const [fliterPrice, setFliterPrice] = useState({ from: "", to: "" });
+  const [filterPrice, setFilterPrice] = useState({ from: "", to: "" });
   const [pageNumber, setPageNumber] = useState<number | null>(1);
-  // filters
+  const [limit, setLimit] = useState<number | null>(10);
+
+  // Filters
   const [filterValues, setFilterValues] = useState<{
     materialCategory: string | null;
     category: string | null;
@@ -41,9 +43,7 @@ const Products = () => {
     condition: null,
   });
 
-  const {brand, category, condition, materialCategory} = filterValues
-  
-
+  const { brand, category, condition, materialCategory } = filterValues;
 
   const isMobileWidth = useSelector(
     (state: RootState) => state.mobileWidth.isMobileWidth
@@ -51,20 +51,15 @@ const Products = () => {
 
   const productResponse = useSelector(
     (state: RootState) => state.products.records
-  ) as TProductResponse | null ;
+  ) as TProductResponse | null;
 
   const products = useMemo(() => productResponse?.data?.data || [], [productResponse]);
-  const meta  = useMemo(
-    () => productResponse?.meta || { page: 1, limit: 3, last_page: 1 },
+  const meta = useMemo(
+    () => productResponse?.meta || { page: 1, limit: 10, last_page: 1 },
     [productResponse]
   );
 
-
-  
-  
-
-
-  // دالة جلب المنتجات
+  // Fetch products
   const fetchProducts = useCallback(() => {
     dispatch(
       actGetAllProducts({
@@ -72,94 +67,85 @@ const Products = () => {
         category: category,
         brand: brand,
         condition: condition,
-        search: debouncedSearchTerm, 
+        search: debouncedSearchTerm,
         page: pageNumber,
-        limit: meta?.limit,
-        min: fliterPrice.from,
-        max: fliterPrice.to,
+        limit: limit,
+        min: filterPrice.from,
+        max: filterPrice.to,
       }) as any
     );
-  }, [dispatch, meta?.page, meta?.limit, debouncedSearchTerm, filterValues, fliterPrice, pageNumber]);
+  }, [dispatch, materialCategory, category, brand, condition, debouncedSearchTerm, pageNumber, limit, filterPrice]);
 
-    // Update the debounced search term
-    useEffect(() => {
-      const handler = setTimeout(() => {
-        setDebouncedSearchTerm(searchTerm);
-      }, 200); 
-  
-      return () => {
-        clearTimeout(handler); // Cleanup the previous timeout
-      };
-    }, [searchTerm]);
+  // Debounce search term
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm);
+    }, 200);
 
-  // استدعاء البيانات عند أول تحميل
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [searchTerm]);
+
+  // Fetch products on component mount or when dependencies change
   useEffect(() => {
     fetchProducts();
   }, [fetchProducts]);
 
-  // التحكم في عرض الشبكة بناءً على الشاشة
+  // Handle mobile width
   useEffect(() => {
     if (isMobileWidth && !cardGrid) {
       setCardGrid(true);
     }
   }, [isMobileWidth, cardGrid]);
 
+  // Fetch all queries
+  const fetchQueries = useCallback(() => {
+    dispatch(actGetAllBrands());
+    dispatch(actGetAllCategories());
+    dispatch(actGetAllConditions());
+    dispatch(actGetAllMaterialCategories());
+  }, [dispatch]);
 
-  // get Allquery
+  useEffect(() => {
+    setPageNumber(1);
+  }, [debouncedSearchTerm, filterValues]);
 
-
-const fetchquerys = useCallback(() => {
-  dispatch(actGetAllBrands());
-  dispatch(actGetAllCategories());
-  dispatch(actGetAllConditions());
-  dispatch(actGetAllMaterialCategories());
-}, [dispatch]);
-
-useEffect(() => {
-  setPageNumber(1);
-}, [debouncedSearchTerm, filterValues, setPageNumber]);
-
-useEffect(() => {
-  fetchquerys();
-}, [fetchquerys]);
-
+  useEffect(() => {
+    fetchQueries();
+  }, [fetchQueries]);
 
   return (
     <div className="bg-section-color">
       <div className="container mx-auto px-2 py-6 space-y-5">
-      <Breadcrumb items={breadcrumbItems} itemNow={"Products"} />
+        <Breadcrumb items={breadcrumbItems} itemNow={"Products"} />
         <MainTitle title="Oilfield Products">
           Discover high-quality materials and tools essential for the oilfield
           industry. From drilling equipment to maintenance tools, we provide
           everything you need for efficient operations.
         </MainTitle>
         <div className="mat flex justify-between gap-2">
-          {/* قسم الفلاتر */}
+          {/* Filters section */}
           <div className="filtration bg-main-color-background p-4 rounded border-color-border border-2 flex flex-col gap-4 w-72 max-md:hidden">
             <p className="text-cyan-500 font-medium">Filter</p>
             <DrawerDefault filterValues={filterValues} setFilterValues={setFilterValues} />
-            {/* <Accordion title="Category" list={categoryData} />
-            <Accordion
-              title="Material Category"
-              list={materialCategoryData}
-            />
-            <Accordion title="Brand" list={brandData} />
-            <Accordion title="Condition" list={conditionData} /> */}
             <span className="block bg-color-border h-0.5"></span>
             <p className="text-cyan-500 font-medium">
               Filter By Price <b>(AED)</b>
             </p>
-            <FilterByPrice  fliterPrice={fliterPrice} setFliterPrice={setFliterPrice} />
+            <FilterByPrice
+              filterPrice={filterPrice}
+              setFilterPrice={setFilterPrice}
+              onPriceChange={(price) => setFilterPrice(price)}
+            />
           </div>
-          {/* قسم المنتجات */}
+          {/* Products section */}
           <div className="products w-full bg-main-color-background border-2 border-color-border flex flex-col gap-4 p-2">
             <div className="head w-full space-y-4">
               <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
               <div className="head-filtration flex justify-between">
                 <div className="left">
-                  <div className="text-color-text-1 bg-section-color border-color-border border-2 p-2 h-10 flex rounded justify-center cursor-pointer items-center text-xs">
-                    Show 12 Products
-                  </div>
+                  <LimitSelector limit={limit} setLimit={setLimit} />
                 </div>
                 <div className="right">
                   <DisplayMethod
@@ -187,11 +173,10 @@ useEffect(() => {
               </div>
             </div>
             <div className="pagination">
-          <Pagination lastPage={meta?.last_page} currentPage={pageNumber} setCurrentPage={setPageNumber} />
-        </div>
+              <Pagination lastPage={meta?.last_page} currentPage={pageNumber} setCurrentPage={setPageNumber} />
+            </div>
           </div>
         </div>
-
       </div>
     </div>
   );

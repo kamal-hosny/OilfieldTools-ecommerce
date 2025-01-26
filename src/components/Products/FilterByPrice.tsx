@@ -1,23 +1,39 @@
+import { useEffect, useState } from "react";
 
-interface IProps  {
-  fliterPrice: {
+interface IProps {
+  filterPrice: {
     from: string;
     to: string;
-  }
-   setFliterPrice : React.Dispatch<
-   React.SetStateAction<{
-    from: string;
-    to: string;
-   }>
- >;
+  };
+  setFilterPrice: React.Dispatch<
+    React.SetStateAction<{
+      from: string;
+      to: string;
+    }>
+  >;
+  onPriceChange: (price: { from: string; to: string }) => void;
 }
 
-const FilterByPrice = ({ fliterPrice, setFliterPrice }: IProps) => {
-  
+const FilterByPrice = ({ filterPrice, onPriceChange }: IProps) => {
+  const [localPrice, setLocalPrice] = useState(filterPrice);
+
+  useEffect(() => {
+    setLocalPrice(filterPrice);
+  }, [filterPrice]);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      onPriceChange(localPrice);
+    }, 500);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [localPrice, onPriceChange]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
-    setFliterPrice((prev) => ({
+    setLocalPrice((prev) => ({
       ...prev,
       [id]: value,
     }));
@@ -33,7 +49,7 @@ const FilterByPrice = ({ fliterPrice, setFliterPrice }: IProps) => {
           type="number"
           min={0}
           id="from"
-          value={fliterPrice.from}
+          value={localPrice.from}
           onChange={handleChange}
           placeholder="0"
           className="p-2 bg-section-color text-sm w-full border border-color-border rounded placeholder-color-text-2 text-color-text-1 focus:ring-2 focus:ring-cyan-500 focus:outline-none"
@@ -41,13 +57,13 @@ const FilterByPrice = ({ fliterPrice, setFliterPrice }: IProps) => {
       </div>
       <div className="to flex flex-col gap-1">
         <label htmlFor="to" className="text-color-text-2">
-        Max
+          Max
         </label>
         <input
           type="number"
           id="to"
           min={0}
-          value={fliterPrice.to}
+          value={localPrice.to}
           onChange={handleChange}
           placeholder="99999"
           className="p-2 bg-section-color text-sm w-full border border-color-border rounded placeholder-color-text-2 text-color-text-1 focus:ring-2 focus:ring-cyan-500 focus:outline-none"
