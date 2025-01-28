@@ -16,6 +16,7 @@ export type TProduct = {
     instock: string | number | null;
     Description: string | null; 
     Currency: string | null;
+    pdf: string | null
   };
   mainImg: {
     url: string | null;

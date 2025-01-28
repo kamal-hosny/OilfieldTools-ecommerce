@@ -37,7 +37,7 @@ const Pagination = ({ lastPage, currentPage, setCurrentPage }: IProps) => {
       <Button
         disabled={currentPage === null || currentPage === lastPage}
         onClick={next}
-        className="border-color-text-2 border rounded-e-none !p-0.5 text-color-text-2 h-8 hover:text-main-color-background hover:bg-color-text-1 w-8 disabled:text-color-text-2 disabled:hover:bg-main-color-background disabled:cursor-auto disabled:border-color-text-2"
+        className="border-color-text-2 border rounded-s-none !p-0.5 text-color-text-2 h-8 hover:text-main-color-background hover:bg-color-text-1 w-8 disabled:text-color-text-2 disabled:hover:bg-main-color-background disabled:cursor-auto disabled:border-color-text-2"
       >
         <ArrowRight />
       </Button>
