@@ -17,7 +17,7 @@ const LandingPage = () => {
         <div style={{textShadow: "0px 0px 20px #000000"}} className="landing-page-info text-center flex flex-col justify-center items-center gap-4  ">
           <p className="title font-bold text-3xl space-x-2">
             <span className="text-[#ffffff]" style={{textShadow: "0px 0px 20px #000000"}}>Welcome to</span>
-            <span className="text-green-600" style={{textShadow: "0px 0px 20px #000000"}}>OilfieldTools</span>
+            <span className="text-cyan-500" style={{textShadow: "0px 0px 20px #000000"}}>OilfieldTools</span>
           </p>
           <p style={{textShadow: "0px 0px 10px #000000"}} className="description text-[#ffffff] w-10/12 max-md:w-96 leading-6 font-medium text-sm">
             Explore a comprehensive range of heavy oil machinery and tools,

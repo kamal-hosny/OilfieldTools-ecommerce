@@ -15,7 +15,7 @@ import rootReducer from "./rootReducer";
 const rootPersistConfig = {
   key: "root",
   storage,
-  whitelist: ["cart", "auth"]
+  whitelist: ["cart", "auth", "wishlist"]
 };
 
 

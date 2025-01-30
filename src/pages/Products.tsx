@@ -8,7 +8,7 @@ import Search from "../components/Products/Search";
 import ProductCard from "../components/common/ProductCard/ProductCard";
 import MainTitle from "../components/common/main/MainTitle";
 import { RootState } from "../store";
-import { useAppDispatch } from "../store/hooks";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { actGetAllProducts } from "../store/products/productsSlice";
 import { actGetAllBrands, actGetAllCategories, actGetAllConditions, actGetAllMaterialCategories } from "../store/query/querySlice";
 import { TProductResponse } from "../types";
@@ -45,12 +45,12 @@ const Products = () => {
 
   const { brand, category, condition, materialCategory } = filterValues;
 
-  const isMobileWidth = useSelector(
-    (state: RootState) => state.mobileWidth.isMobileWidth
+  const isMobileWidth = useAppSelector(
+    (state) => state.mobileWidth.isMobileWidth
   );
 
-  const productResponse = useSelector(
-    (state: RootState) => state.products.records
+  const productResponse = useAppSelector(
+    (state) => state.products.records
   ) as TProductResponse | null;
 
   const products = useMemo(() => productResponse?.data?.data || [], [productResponse]);
@@ -114,6 +114,7 @@ const Products = () => {
   useEffect(() => {
     fetchQueries();
   }, [fetchQueries]);
+
 
   return (
     <div className="bg-section-color">

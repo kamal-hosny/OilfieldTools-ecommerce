@@ -109,7 +109,7 @@ const OurProducts = () => {
         {/* Footer Section */}
         <div className="flex items-center justify-between">
           <div className="counter text-color-text-2 space-x-1">
-            <span className="text-color-text-1">{String(currentSlide).padStart(2, "0")}</span>
+            <span className="text-color-text-1">{String(currentSlide).padStart(2, "0") || 0}</span>
             <span>of</span>
             <span>{String(totalSlides).padStart(2, "0")}</span>
           </div>

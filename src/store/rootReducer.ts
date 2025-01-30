@@ -7,6 +7,8 @@ import menuReducer from "./features/menu/menuSlice";
 import mobileWidthReducer from "./features/mobileWidth/mobileWidthSlice";
 import productsReducer from "./products/productsSlice";
 import queryReducer from "./query/querySlice";
+import wishlistReducer from "./wishlist/wishlistReducer";
+import cartReducer from "./cart/cartReducer";
 
 const authPersistConfig = {
     key: "auth",
@@ -21,7 +23,9 @@ const rootReducer = combineReducers({
     query: queryReducer,
     darkMode: darkModeReducer,
     menu: menuReducer,
-    mobileWidth:  mobileWidthReducer
+    mobileWidth:  mobileWidthReducer,
+    wishlist: wishlistReducer,
+    cart: cartReducer,
 
 })
 
