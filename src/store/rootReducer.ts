@@ -11,22 +11,23 @@ import wishlistReducer from "./wishlist/wishlistReducer";
 import cartReducer from "./cart/cartReducer";
 
 const authPersistConfig = {
-    key: "auth",
-    storage,
-    whitelist: ["user", "token"],
-  }
-
+  key: "auth",
+  storage,
+  whitelist: ["user", "token"], 
+};
 
 const rootReducer = combineReducers({
-    auth: persistReducer(authPersistConfig, auth),
-    products: productsReducer,
-    query: queryReducer,
-    darkMode: darkModeReducer,
-    menu: menuReducer,
-    mobileWidth:  mobileWidthReducer,
-    wishlist: wishlistReducer,
-    cart: cartReducer,
+  auth: persistReducer(authPersistConfig, auth),
+  products: productsReducer,
+  query: queryReducer,
+  darkMode: darkModeReducer,
+  menu: menuReducer,
+  mobileWidth: mobileWidthReducer,
+  wishlist: wishlistReducer,
+  cart: cartReducer,
+});
 
-})
+
+export type RootState = ReturnType<typeof rootReducer>;
 
 export default rootReducer;

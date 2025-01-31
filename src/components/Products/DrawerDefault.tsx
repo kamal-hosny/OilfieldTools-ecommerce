@@ -19,40 +19,47 @@ interface IProps {
     }>
   >;
 }
+
 interface OptionType {
   label: string;
   value: string;
 }
 
 export function DrawerDefault({ filterValues, setFilterValues }: IProps) {
-  const { brandRecords, categoryRecords, conditionRecords, materialCategoryRecords } =
-    useAppSelector((state) => state?.query);
+  const { 
+    brandRecords = { data: [] }, 
+    categoryRecords = { data: [] }, 
+    conditionRecords = { data: [] }, 
+    materialCategoryRecords = { data: [] } 
+  } = useAppSelector((state) => state?.query) || {};
 
-  const categoryData = (categoryRecords as any)?.data;
-  const brandData = (brandRecords as any)?.data;
-  const conditionData = (conditionRecords as any)?.data;
-  const materialCategoryData = (materialCategoryRecords as any)?.data;
 
-  const valueMaterialCategory = materialCategoryData?.map((item: TQuerty) => ({
+  const categoryData = Array.isArray(categoryRecords) ? categoryRecords : categoryRecords?.data || [];
+  const brandData = Array.isArray(brandRecords) ? brandRecords : brandRecords?.data || [];
+  const conditionData = Array.isArray(conditionRecords) ? conditionRecords : conditionRecords?.data || [];
+  const materialCategoryData = Array.isArray(materialCategoryRecords) ? materialCategoryRecords : materialCategoryRecords?.data || [];
+
+  const valueMaterialCategory = materialCategoryData.map((item: TQuerty) => ({
     label: item.name,
     value: item.name,
-  })) || []
+  }));
 
-  const valueCategory = categoryData?.map((item: TQuerty) => ({
+  const valueCategory = categoryData.map((item: TQuerty) => ({
     label: item.name,
     value: item.name,
-  })) || []
+  }));
 
-  const valueBrand = brandData?.map((item: TQuerty) => ({
+  const valueBrand = brandData.map((item: TQuerty) => ({
     label: item.name,
     value: item.name,
-  })) || []
+  }));
 
-  const valueCondition = conditionData?.map((item: TQuerty) => ({
+  const valueCondition = conditionData.map((item: TQuerty) => ({
     label: item.name,
     value: item.name,
-  })) || []
+  }));
 
+  // Handle filter changes
   const handleFilterChange = useCallback(
     (field: string, selectedOption: { label: string; value: string } | null) => {
       setFilterValues((prev) => ({
@@ -67,13 +74,14 @@ export function DrawerDefault({ filterValues, setFilterValues }: IProps) {
     <React.Fragment>
       <div className="flex flex-col gap-8">
         <div className="w-full flex flex-col gap-2">
+          {/* Material Category Select */}
           <label className="text-color-text-1 font-medium text-sm">
             Select Category Material
           </label>
           <Select<OptionType>
             classNamePrefix="select"
             value={valueMaterialCategory.find(
-              (option :any) => option.value === filterValues.materialCategory
+              (option: any) => option.value === filterValues.materialCategory
             )}
             onChange={(value) => handleFilterChange("materialCategory", value)}
             options={valueMaterialCategory}
@@ -81,13 +89,14 @@ export function DrawerDefault({ filterValues, setFilterValues }: IProps) {
             isSearchable
           />
 
+          {/* Category Select */}
           <label className="text-color-text-1 font-medium text-sm">
             Select Category
           </label>
           <Select<OptionType>
             classNamePrefix="select"
             value={valueCategory.find(
-              (option :any) => option.value === filterValues.category
+              (option: any) => option.value === filterValues.category
             )}
             onChange={(value) => handleFilterChange("category", value)}
             options={valueCategory}
@@ -95,13 +104,14 @@ export function DrawerDefault({ filterValues, setFilterValues }: IProps) {
             isSearchable
           />
 
+          {/* Brand Select */}
           <label className="text-color-text-1 font-medium text-sm">
             Select Brand
           </label>
           <Select<OptionType>
             classNamePrefix="select"
             value={valueBrand.find(
-              (option :any) => option.value === filterValues.brand
+              (option: any) => option.value === filterValues.brand
             )}
             onChange={(value) => handleFilterChange("brand", value)}
             options={valueBrand}
@@ -109,13 +119,14 @@ export function DrawerDefault({ filterValues, setFilterValues }: IProps) {
             isSearchable
           />
 
+          {/* Condition Select */}
           <label className="text-color-text-1 font-medium text-sm">
             Select Condition
           </label>
           <Select<OptionType>
             classNamePrefix="select"
             value={valueCondition.find(
-              (option :any) => option.value === filterValues.condition
+              (option: any) => option.value === filterValues.condition
             )}
             onChange={(value) => handleFilterChange("condition", value)}
             options={valueCondition}

@@ -10,29 +10,31 @@ import {
   REGISTER,
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
-import rootReducer from "./rootReducer";
+import rootReducer, { RootState } from "./rootReducer";
+
 
 const rootPersistConfig = {
   key: "root",
   storage,
-  whitelist: ["cart", "auth", "wishlist"]
+  whitelist: ["cart", "wishlist"],
 };
 
 
-const persistedReducer = persistReducer(rootPersistConfig, rootReducer);
+const persistedReducer = persistReducer<RootState>(rootPersistConfig, rootReducer as any);
 
 const store = configureStore({
   reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
-  getDefaultMiddleware({
-    serializableCheck: {
-      ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-    },
-  }),
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }),
 });
 
+
 export const persistor = persistStore(store);
-export type RootState = ReturnType<typeof store.getState>;
+
 export type AppDispatch = typeof store.dispatch;
 
 export default store;

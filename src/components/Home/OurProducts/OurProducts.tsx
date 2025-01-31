@@ -22,7 +22,7 @@ const OurProducts = () => {
   const [currentSlide, setCurrentSlide] = useState(1); 
 
   const productResponse = useAppSelector(
-    (state) => state.products.records
+    (state) => state?.products?.records
   ) as TProductResponse | null;
   const products = useMemo(() => productResponse?.data?.data || [], [productResponse]);
   const totalSlides = products.length || 5;

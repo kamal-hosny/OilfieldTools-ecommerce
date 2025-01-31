@@ -28,7 +28,8 @@ export type TProduct = {
     publicid: string | null;
   }[];
   pdf: string | null;
-  instock: number; // هذا حقل إضافي
+  instock: number;
+  quantity?: number | string |  null | undefined;
 };
 
 export type TProductResponse = {

@@ -9,13 +9,14 @@ import { useNavigate } from "react-router-dom";
 import Img from "../components/ui/Img";
 import { Minus, Plus, X } from "lucide-react";
 import { increaseQuantity, decreaseQuantity, removeFromCart } from "../store/cart/cartActions";
+import { TProduct } from "../types";
+
 
 const breadcrumbItems = [{ label: "Home", link: "/" }];
-
 const CartPage = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const cart = useAppSelector((state) => state.cart?.items);
+  const cart = useAppSelector((state) => state.cart?.items as TProduct[]);
 
   const defaultImg = "https://dummyimage.com/200x200";
 
@@ -42,10 +43,10 @@ const CartPage = () => {
     }
   };
 
-  const totalItems = cart?.reduce((acc, item) => acc + item.quantity, 0) || 0;
+  const totalItems = cart?.reduce((acc, item) => acc + (Number(item.quantity) || 0), 0) || 0;
   const subtotal =
     cart?.reduce(
-      (acc, item) => acc + (item.data?.price || 0) * item.quantity,
+      (acc, item) => acc + (item.data?.price || 0) * (Number(item.quantity) || 0),
       0
     ) || 0;
 
@@ -112,7 +113,7 @@ const CartPage = () => {
                           <Img
                             className="w-full h-full object-cover"
                             src={item.mainImg?.url ?? defaultImg}
-                            alt={item.data?.product_name}
+                            alt={item.data?.product_name ?? "Unknown Product"}
                           />
                           <X onClick={() => {handleRemove(item._id)}} className="cursor-pointer opacity-70 hover:opacity-100 absolute h-7 w-7 p-1 rounded-full bg-section-color border-color-border border-2 -top-2 -start-4 " />
                         </div>
@@ -134,9 +135,9 @@ const CartPage = () => {
                           />
                           <input
                             type="number"
-                            value={item?.quantity}
+                            value={item?.quantity ?? ""}
                             min={0}
-                            max={item?.data?.instock}
+                            max={item?.data?.instock ?? undefined}
                             className="bg-section-color border-color-border border-2 w-14 h-10 focus:ring-2 focus:ring-cyan-500 focus:outline-none p-1 text-center"
                             onChange={(e) =>
                               handleInputChange(
@@ -153,7 +154,7 @@ const CartPage = () => {
                       </td>
                       <td className="px-6 py-4">
                         {formatCurrency(
-                          (item.data?.price || 0) * item.quantity
+                          (item.data?.price || 0) * (Number(item.quantity) || 0)
                         )}
                       </td>
                     </tr>

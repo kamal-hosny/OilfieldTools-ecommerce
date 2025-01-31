@@ -1,7 +1,7 @@
 import { LayoutGrid, List } from "lucide-react";
 import { Dispatch, SetStateAction } from "react";
 import { useSelector } from "react-redux";
-import { RootState } from "../../store";
+import { RootState } from "../../store/rootReducer";
 
 interface IDisplayMethod {
   cardGrid: boolean;
@@ -10,7 +10,7 @@ interface IDisplayMethod {
 
 const DisplayMethod = ({cardGrid, setCardGrid}: IDisplayMethod) => {
 
-  const isMobileWidth = useSelector((state: RootState) => state?.mobileWidth.isMobileWidth);
+  const isMobileWidth = useSelector((state: RootState) => state?.mobileWidth?.isMobileWidth);
 
 
   const changeGridTrue = () => {

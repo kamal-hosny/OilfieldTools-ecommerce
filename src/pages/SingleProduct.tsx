@@ -33,14 +33,14 @@ const SingleProduct = () => {
   const swiperRef = useRef<any>(null);
   const [counter, setCounter] = useState<number>(1);
   const [descriptionState, setDescriptionState] = useState("information");
-  const { record, loading, error } = useAppSelector((state) => state.products);
+  const { record, loading, error } = useAppSelector((state) => state.products ?? { record: null, loading: "idle", error: null });
   
   const defaultImg = "https://dummyimage.com/300x300";
   
   // Wishlist
-  const wishlist = useAppSelector((state) => state.wishlist.items);
+  const wishlist = useAppSelector((state) => state?.wishlist?.items ?? []);
   const product = (record as IProductResponse)?.data as TProduct;
-  const isProductInWishlist = wishlist.some((item) => item._id === product?._id);
+  const isProductInWishlist = wishlist.some((item: TProduct) => item._id === product?._id);
   const [isHeartFilled, setIsHeartFilled] = useState(isProductInWishlist);
 
   useEffect(() => {
@@ -61,14 +61,15 @@ const SingleProduct = () => {
     } else {
       handleAddToWishlist(product);
     }
-    setIsHeartFilled((prev) => !prev);
+    setIsHeartFilled((prev: boolean) => !prev);
   };
 
   // Cart
-  const cart = useAppSelector((state) => state?.cart?.items);
+  const cart = useAppSelector((state) => state.cart?.items ?? []);
+
   
   const addProductToCart = (product: TProduct) => {
-    const isProductInCart = cart.some((item) => item._id === product?._id);
+    const isProductInCart = cart.some((item: TProduct) => item._id === product?._id);
     
     console.log(product, counter);
 

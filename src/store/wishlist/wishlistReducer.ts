@@ -1,4 +1,5 @@
 
+import { TProduct } from '../../types';
 import { ADD_TO_WISHLIST, REMOVE_FROM_WISHLIST } from './wishlistActions';
 
 const initialState = {
@@ -15,7 +16,7 @@ const wishlistReducer = (state = initialState, action: any) => {
     case REMOVE_FROM_WISHLIST:
       return {
         ...state,
-        items: state.items.filter((item) => item._id !== action.payload._id),
+        items: state.items.filter((item: TProduct) => item._id !== action.payload._id),
       };
     default:
       return state;

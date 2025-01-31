@@ -4,7 +4,7 @@ import Button from "../../ui/Button";
 import Img from "../../ui/Img";
 import { useState, useEffect, useMemo } from "react";
 import { textSlicer } from "../../../utils";
-import { TProduct } from "../../../types";
+import {  TProduct } from "../../../types";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../../../store/hooks";
 import {
@@ -12,18 +12,20 @@ import {
   removeFromWishlist,
 } from "../../../store/wishlist/wishlistActions";
 import { addToCart, increaseQuantity } from "../../../store/cart/cartActions";
+import ProductCardSkeleton from "../../SkeletonsUi/ProductCardSkeleton";
 
 interface IProductCard {
   productData: TProduct;
   grid?: boolean;
+
 }
 
-const ProductCard = ({ productData, grid = true }: IProductCard) => {
+const ProductCard = ({ productData, grid = true, }: IProductCard) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
   if (!productData) {
-    return <div>Product data is missing.</div>;
+    return <ProductCardSkeleton grid={grid} />;
   }
 
   const { _id, mainImg, data } = productData;
@@ -34,9 +36,9 @@ const ProductCard = ({ productData, grid = true }: IProductCard) => {
 
   const defaultImg = "https://dummyimage.com/200x200";
 
-  const wishlist = useAppSelector((state) => state.wishlist.items);
+  const wishlist = useAppSelector((state) => state?.wishlist?.items || []) as TProduct[];
   const isProductInWishlist = useMemo(
-    () => wishlist.some((item) => item._id === _id),
+    () => wishlist.some((item) => item?._id === _id),
     [wishlist, _id]
   );
 
@@ -55,11 +57,13 @@ const ProductCard = ({ productData, grid = true }: IProductCard) => {
     setIsHeartFilled((prev) => !prev);
   };
 
-  const cart = useAppSelector((state) => state?.cart?.items);
+  const cart = useAppSelector((state) => state?.cart?.items || []) as TProduct[];
   const isProductInCart = useMemo(
     () => cart?.some((item) => item._id === productData?._id),
     [cart, productData]
   );
+
+
 
   const addProductToCart = (product: TProduct) => {
     if (!isProductInCart) {
@@ -69,11 +73,12 @@ const ProductCard = ({ productData, grid = true }: IProductCard) => {
     }
   };
 
+
   const renderImageSection = () => (
-    <div className="relative image w-full h-56 rounded-md border-color-border border overflow-hidden">
+    <div className={`${!grid && "!w-60" } relative image w-full h-56 rounded-md border-color-border border overflow-hidden`}>
       <Img
         onClick={() => navigateToSingle(_id)}
-        className="rounded-md cursor-pointer w-full h-full object-cover hover:scale-110 transition-all"
+        className={`rounded-md cursor-pointer w-full h-full object-cover hover:scale-110 transition-all`}
         src={url || defaultImg}
         alt={originalname || "Product Image"}
         loading="lazy"
@@ -90,7 +95,7 @@ const ProductCard = ({ productData, grid = true }: IProductCard) => {
   );
 
   const renderBodySection = () => (
-    <div className="body space-y-3">
+    <div className={`body space-y-3`}>
       <div className="space-y-1.5">
         <p className="title text-color-text-1 text-base capitalize font-medium">
           {product_name || ""}
@@ -166,7 +171,7 @@ const ProductCard = ({ productData, grid = true }: IProductCard) => {
               </Button>
               <Button
                 onClick={() => addProductToCart(productData)}
-                className={`border-button-color border-2 text-xs text-color-text-1 ${
+                className={` ${!grid && "!w-full" } border-button-color border-2 text-xs text-color-text-1 ${
                   instock
                     ? "hover:bg-button-hover-color hover:text-main-color-background"
                     : "opacity-50 cursor-not-allowed"

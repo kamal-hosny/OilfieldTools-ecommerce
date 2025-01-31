@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { useSelector } from "react-redux";
 import Breadcrumb from "../components/Products/Breadcrumb";
 import DisplayMethod from "../components/Products/DisplayMethod";
 import { DrawerDefault } from "../components/Products/DrawerDefault";
@@ -7,7 +6,6 @@ import FilterByPrice from "../components/Products/FilterByPrice";
 import Search from "../components/Products/Search";
 import ProductCard from "../components/common/ProductCard/ProductCard";
 import MainTitle from "../components/common/main/MainTitle";
-import { RootState } from "../store";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { actGetAllProducts } from "../store/products/productsSlice";
 import { actGetAllBrands, actGetAllCategories, actGetAllConditions, actGetAllMaterialCategories } from "../store/query/querySlice";
@@ -46,13 +44,13 @@ const Products = () => {
   const { brand, category, condition, materialCategory } = filterValues;
 
   const isMobileWidth = useAppSelector(
-    (state) => state.mobileWidth.isMobileWidth
+    (state) => (state.mobileWidth as { isMobileWidth: boolean }).isMobileWidth
   );
-
   const productResponse = useAppSelector(
-    (state) => state.products.records
+    (state) => state?.products?.records
   ) as TProductResponse | null;
 
+  
   const products = useMemo(() => productResponse?.data?.data || [], [productResponse]);
   const meta = useMemo(
     () => productResponse?.meta || { page: 1, limit: 10, last_page: 1 },
@@ -169,6 +167,8 @@ const Products = () => {
                     key={product._id}
                     grid={cardGrid}
                     productData={product}
+
+
                   />
                 ))}
               </div>
