@@ -43,6 +43,9 @@ const CartPage = () => {
     }
   };
 
+  const navigateToSingle = (id: string) => navigate(`/singleProduct/${id}`);
+
+
   const totalItems = cart?.reduce((acc, item) => acc + (Number(item.quantity) || 0), 0) || 0;
   const subtotal =
     cart?.reduce(
@@ -76,8 +79,8 @@ const CartPage = () => {
       <div className="container mx-auto px-2 py-6 space-y-5">
         <Breadcrumb items={breadcrumbItems} itemNow={"Cart"} />
         <MainTitle title="Shopping Cart" />
-        <div className="grid md:grid-cols-3 gap-8 mt-16 max-md:p-0 max-md:mt-4">
-          <div className="md:col-span-2 space-y-4">
+        <div className="grid md:grid-cols-3 gap-8 mt-16 max-md:p-0 max-md:mt-4 ">
+          <div className="md:col-span-2 space-y-4 overflow-x-auto">
             <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
               <table className="w-full text-sm text-left bg-main-color-background border-color-border border-2">
                 <thead className="text-xs text-color-text-2 uppercase border-color-border border-b-2">
@@ -111,7 +114,8 @@ const CartPage = () => {
                       >
                         <div className="relative image w-24 h-24 border-color-border border-2 rounded">
                           <Img
-                            className="w-full h-full object-cover"
+                          onClick={()=>{navigateToSingle(item._id)}}
+                            className="w-full h-full object-cover cursor-pointer"
                             src={item.mainImg?.url ?? defaultImg}
                             alt={item.data?.product_name ?? "Unknown Product"}
                           />

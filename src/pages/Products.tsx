@@ -12,6 +12,8 @@ import { actGetAllBrands, actGetAllCategories, actGetAllConditions, actGetAllMat
 import { TProductResponse } from "../types";
 import Pagination from "../components/Products/Pagination";
 import LimitSelector from "../components/Products/LimitSelector";
+import ProductCardSkeleton from "../components/SkeletonsUi/ProductCardSkeleton";
+import LottieHandler from "../components/common/feedback/LottieHandler/LottieHandler";
 
 const breadcrumbItems = [
   { label: "Home", link: "/" },
@@ -50,6 +52,7 @@ const Products = () => {
     (state) => state?.products?.records
   ) as TProductResponse | null;
 
+  const {loading, error} = useAppSelector((state) => state?.products)
   
   const products = useMemo(() => productResponse?.data?.data || [], [productResponse]);
   const meta = useMemo(
@@ -74,7 +77,7 @@ const Products = () => {
     );
   }, [dispatch, materialCategory, category, brand, condition, debouncedSearchTerm, pageNumber, limit, filterPrice]);
 
-  // Debounce search term
+ 
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedSearchTerm(searchTerm);
@@ -85,7 +88,6 @@ const Products = () => {
     };
   }, [searchTerm]);
 
-  // Fetch products on component mount or when dependencies change
   useEffect(() => {
     fetchProducts();
   }, [fetchProducts]);
@@ -113,6 +115,23 @@ const Products = () => {
     fetchQueries();
   }, [fetchQueries]);
 
+
+   // Loading skeleton
+   const loadingSkeleton = useMemo(() => {
+    return Array.from({ length: 6 }, (_, index) => (
+      <ProductCardSkeleton key={index} grid={cardGrid} />
+    ));
+  }, [cardGrid]);
+
+  // error
+
+  if(error){
+    return(
+      <div className="relative login bg-section-color w-screen h-[calc(100vh-65px)] flex justify-center items-center">
+    <LottieHandler type="error" message={error} />
+  </div>
+    )
+  }
 
   return (
     <div className="bg-section-color">
@@ -162,7 +181,7 @@ const Products = () => {
                     : "flex flex-col gap-4"
                 }
               >
-                {products.map((product: any) => (
+                {loading === "pending" ? loadingSkeleton  : products.map((product: any) => (
                   <ProductCard
                     key={product._id}
                     grid={cardGrid}

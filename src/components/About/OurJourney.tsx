@@ -1,6 +1,8 @@
 import Img from "../ui/Img";
 import MainTitle from "../common/main/MainTitle";
 
+import oilfieldImg from "../../assets/about/Oilfield.jpeg"
+
 type OurJourneyCard = {
     id: number;
     name: string;
@@ -46,8 +48,9 @@ const OurJourney = () => {
       <div className="image flex-1 border-color-border border-2 rounded-md overflow-hidden">
         <Img
           className="w-full h-full"
-          src="https://i.pinimg.com/736x/d7/f9/b7/d7f9b721fcdeb6a12e1436989c36f562.jpg"
+          src={oilfieldImg}
           alt="Our Journey in Oilfield Tools"
+          loading="lazy"
         />
       </div>
     </div>

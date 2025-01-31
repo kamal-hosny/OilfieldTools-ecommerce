@@ -6,6 +6,8 @@ import Cart from "./Cart/Cart";
 import { memo, useCallback, useState } from "react";
 import Favorite from "./Favorite/Favorite";
 import NavbarMobile from "./Mobile/NavbarMobile/NavbarMobile";
+import ProfileHeader from "./auth/ProfileHeader";
+import { useAppSelector } from "../../../store/hooks";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -18,6 +20,9 @@ const [openNav, setOpenNav] = useState<boolean>(false)
   const closeMenu = () =>{
     setOpenNav((prev) => !prev)
 }
+
+const { token } = useAppSelector((state) => state.auth)
+
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-color-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
@@ -53,13 +58,18 @@ const [openNav, setOpenNav] = useState<boolean>(false)
             <DarkMode />
             <Favorite />
             <Cart />
+            {token && (<ProfileHeader />)}
+             
           </div>
+          {!token && (
           <div className="btn flex gap-1.5 justify-center items-center max-md:hidden">
-            <Button onClick={handleLogin} className="bg-transparent hover:bg-section-color  !text-color-text-1">
-              Login
-            </Button>
-            <Button onClick={handleRegister} className="bg-button-color hover:bg-button-hover-color text-main-color-background">Register</Button>
-          </div>
+          <Button onClick={handleLogin} className="bg-transparent hover:bg-section-color  !text-color-text-1">
+            Login
+          </Button>
+          <Button onClick={handleRegister} className="bg-button-color hover:bg-button-hover-color text-main-color-background">Register</Button>
+        </div>
+          )}
+
           <div className="menu md:hidden">
             <Button onClick={closeMenu} className="bg-transparent !text-color-text-1 hover:bg-section-color !p-2">
               <Menu size={20} />
