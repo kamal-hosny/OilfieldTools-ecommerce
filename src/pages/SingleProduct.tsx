@@ -17,6 +17,7 @@ import LottieHandler from "../components/common/feedback/LottieHandler/LottieHan
 import FileDownload from "../components/SingleProduct/FileDownload";
 import { addToWishlist, removeFromWishlist } from "../store/wishlist/wishlistActions";
 import { addToCart, increaseQuantity } from "../store/cart/cartActions";
+import { addToast } from "../store/toasts/toastsSlice";
 
 const breadcrumbItems = [
   { label: "Home", link: "/" },
@@ -60,6 +61,10 @@ const SingleProduct = () => {
       handleRemoveFromWishlist(product);
     } else {
       handleAddToWishlist(product);
+      dispatch(addToast({
+        message: "Item has been added to the wishlist.",
+        type: "success"
+    }));
     }
     setIsHeartFilled((prev: boolean) => !prev);
   };
@@ -76,6 +81,10 @@ const SingleProduct = () => {
     if (!isProductInCart) {
       
       dispatch(addToCart(product, counter));
+      dispatch(addToast({
+        message: `"${product.data.product_name}" has been added to the cart`,
+        type: "success"
+      }));
     } else {
       dispatch(increaseQuantity(product?._id, counter))
     }

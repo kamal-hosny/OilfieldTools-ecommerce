@@ -1,5 +1,5 @@
 import { TProduct } from "../../types";
-import { ADD_TO_CART, REMOVE_FROM_CART, INCREASE_QUANTITY, DECREASE_QUANTITY } from "./cartActions";
+import { ADD_TO_CART, REMOVE_FROM_CART, INCREASE_QUANTITY, DECREASE_QUANTITY, CLEAR_CART } from "./cartActions";
 
 interface CartState {
   items: TProduct[];
@@ -59,6 +59,12 @@ const cartReducer = (state = initialState, action: any) => {
           )
           .filter((item: TProduct) => (Number(item.quantity) || 0) > 0),
       };
+
+      case CLEAR_CART:
+        return {
+          ...state,
+          items: [],
+        };
 
     default:
       return state;

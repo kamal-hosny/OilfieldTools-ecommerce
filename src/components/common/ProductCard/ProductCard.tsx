@@ -13,6 +13,7 @@ import {
 } from "../../../store/wishlist/wishlistActions";
 import { addToCart, increaseQuantity } from "../../../store/cart/cartActions";
 import ProductCardSkeleton from "../../SkeletonsUi/ProductCardSkeleton";
+import { addToast } from "../../../store/toasts/toastsSlice";
 
 interface IProductCard {
   productData: TProduct;
@@ -53,6 +54,10 @@ const ProductCard = ({ productData, grid = true, }: IProductCard) => {
       dispatch(removeFromWishlist(productData));
     } else {
       dispatch(addToWishlist(productData));
+      dispatch(addToast({
+        message: "Item has been added to the wishlist.",
+        type: "success"
+    }));
     }
     setIsHeartFilled((prev) => !prev);
   };
@@ -64,12 +69,21 @@ const ProductCard = ({ productData, grid = true, }: IProductCard) => {
   );
 
 
+  
 
   const addProductToCart = (product: TProduct) => {
     if (!isProductInCart) {
       dispatch(addToCart(product, 1));
+      dispatch(addToast({
+        message: `"${product.data.product_name}" has been added to the cart`,
+        type: "success"
+      }));
     } else {
       dispatch(increaseQuantity(product?._id, 1));
+      dispatch(addToast({
+        message: `The quantity of "${product.data.product_name}" has been increased in the cart`,
+        type: "info"
+      }));
     }
   };
 

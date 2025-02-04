@@ -8,15 +8,23 @@ import { formatCurrency } from "../utils";
 import { useNavigate } from "react-router-dom";
 import Img from "../components/ui/Img";
 import { Minus, Plus, X } from "lucide-react";
-import { increaseQuantity, decreaseQuantity, removeFromCart } from "../store/cart/cartActions";
+import {
+  increaseQuantity,
+  decreaseQuantity,
+  removeFromCart,
+  clearCart,
+} from "../store/cart/cartActions";
 import { TProduct } from "../types";
-
+import { createOrder } from "../store/orderCart/act/actCreateOrder";
+import { addToast } from "../store/toasts/toastsSlice";
 
 const breadcrumbItems = [{ label: "Home", link: "/" }];
 const CartPage = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const cart = useAppSelector((state) => state.cart?.items as TProduct[]);
+
+  const { _id } = useAppSelector((state) => state.auth?.test || { _id: '' });
 
   const defaultImg = "https://dummyimage.com/200x200";
 
@@ -34,8 +42,8 @@ const CartPage = () => {
   };
 
   const handleRemove = (id: string) => {
-    dispatch(removeFromCart(id))
-  } 
+    dispatch(removeFromCart(id));
+  };
 
   const handleInputChange = (id: string, value: number) => {
     if (value >= 0) {
@@ -45,13 +53,79 @@ const CartPage = () => {
 
   const navigateToSingle = (id: string) => navigate(`/singleProduct/${id}`);
 
-
-  const totalItems = cart?.reduce((acc, item) => acc + (Number(item.quantity) || 0), 0) || 0;
+  const totalItems =
+    cart?.reduce((acc, item) => acc + (Number(item.quantity) || 0), 0) || 0;
   const subtotal =
     cart?.reduce(
-      (acc, item) => acc + (item.data?.price || 0) * (Number(item.quantity) || 0),
+      (acc, item) =>
+        acc + (item.data?.price || 0) * (Number(item.quantity) || 0),
       0
     ) || 0;
+
+// transformedCart
+const transformCartData = (cart: any) => {
+  return cart.map((item: any) => ({
+      _id: item._id,
+      image: item.mainImg?.url || defaultImg,
+      product_name: item.data?.product_name || "Unknown Product",
+      price: item.data?.price || 0,
+      model_number: item.data?.model_number || "",
+      Dimension: item.data?.Dimension || "",
+      Unit_of_Measurement: item.data?.Unit_of_Measurement || "",
+      condition: item.data?.condition || "",
+      brand: item.data?.brand || "",
+      weight: item.data?.weight || "",
+      size: item.data?.size || "",
+      HNS_code: item.data?.HNS_code || "",
+      material_Category: item.data?.material_Category || "",
+      instock: item.data?.instock || 0,
+      Description: item.data?.Description || "",
+      Currency: item.data?.Currency || "AED",
+      Quantity: item.quantity || 0
+    }));
+}
+
+
+
+  const sentOrder = () => {
+    if (!_id || _id == "") {
+      console.error("User ID is missing.");
+      return;
+    }
+    const transformedCart = transformCartData(cart)
+
+    dispatch(
+      createOrder({
+        "RFQ Date": new Date().toISOString(),
+        Customer: _id,
+        status: "pending",
+        OG_Invoice: "N/A",
+        Customer_PO: "N/A",
+        Payment_Date: "",
+        Payment_AED: 0,
+        Payment_Reference: "",
+        Shipping_status: "",
+        DN: "N/A",
+        Comments: "No comments",
+        cart: transformedCart,
+      })
+    )
+    .then(() => {
+      console.log("success");
+      dispatch(addToast({
+        message: `The order for purchasing the products has been sent.`,
+        type: "success"
+      }));
+      dispatch(clearCart());
+  })
+  .catch((error) => {
+      console.error("Error updating:", error);
+      dispatch(addToast({
+        message:  error?.message || "An unexpected error occurred. Please try again.",
+        type: "error"
+      }));
+  });
+  };
 
   if (!cart || cart.length === 0) {
     return (
@@ -61,14 +135,13 @@ const CartPage = () => {
           <MainTitle title="Shopping Cart" />
           <LottieHandler type="empty" message="Your cart is empty" />
           <div className="flex flex-col justify-center items-center">
-          <Button
-            onClick={handleGotoProducts}
-            className="w-fit  border-button-color border text-color-text-1 !p-3 hover:bg-button-hover-color hover:text-main-color-background"
-          >
-            Continue Shopping
-          </Button>
+            <Button
+              onClick={handleGotoProducts}
+              className="w-fit  border-button-color border text-color-text-1 !p-3 hover:bg-button-hover-color hover:text-main-color-background"
+            >
+              Continue Shopping
+            </Button>
           </div>
-          
         </div>
       </div>
     );
@@ -114,12 +187,19 @@ const CartPage = () => {
                       >
                         <div className="relative image w-24 h-24 border-color-border border-2 rounded">
                           <Img
-                          onClick={()=>{navigateToSingle(item._id)}}
+                            onClick={() => {
+                              navigateToSingle(item._id);
+                            }}
                             className="w-full h-full object-cover cursor-pointer"
                             src={item.mainImg?.url ?? defaultImg}
                             alt={item.data?.product_name ?? "Unknown Product"}
                           />
-                          <X onClick={() => {handleRemove(item._id)}} className="cursor-pointer opacity-70 hover:opacity-100 absolute h-7 w-7 p-1 rounded-full bg-section-color border-color-border border-2 -top-2 -start-4 " />
+                          <X
+                            onClick={() => {
+                              handleRemove(item._id);
+                            }}
+                            className="cursor-pointer opacity-70 hover:opacity-100 absolute h-7 w-7 p-1 rounded-full bg-section-color border-color-border border-2 -top-2 -start-4 "
+                          />
                         </div>
                       </th>
                       <td className="px-6 py-4">
@@ -192,7 +272,7 @@ const CartPage = () => {
               <span>{formatCurrency(subtotal)}</span>
             </div>
             <div className="btn flex flex-col gap-3 mt-3">
-              <Button className="w-full bg-button-color !p-3 hover:bg-button-hover-color text-main-color-background">
+              <Button onClick={sentOrder} className="w-full bg-button-color !p-3 hover:bg-button-hover-color text-main-color-background">
                 Request For Quotation
               </Button>
               <Button

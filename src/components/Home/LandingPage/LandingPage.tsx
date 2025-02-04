@@ -1,20 +1,17 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import "swiper/swiper-bundle.css";
-
-
 import Img from "../../ui/Img";
-
 import landingPage1 from "../../../assets/landingPage/LandingPage1.jpg";
 import landingPage2 from "../../../assets/landingPage/LandingPage2.jpg";
-import SearchLanding from "./SearchLanding";
-
+import { Link } from "react-router-dom";
+import Button from "../../ui/Button";
 
 const LandingPage = () => {
   return (
     <div className="landing-page relative">
       <div className="flex flex-col justify-center items-center gap-6 floating-content absolute top-1/2 -translate-x-1/2 left-1/2 -translate-y-1/2 z-[2]">
-        <div style={{textShadow: "0px 0px 20px #000000"}} className="landing-page-info text-center flex flex-col justify-center items-center gap-4  ">
+        <div style={{textShadow: "0px 0px 20px #000000"}} className="landing-page-info text-center flex flex-col justify-center items-center gap-4">
           <p className="title font-bold text-3xl space-x-2">
             <span className="text-[#ffffff]" style={{textShadow: "0px 0px 20px #000000"}}>Welcome to</span>
             <span className="text-cyan-500" style={{textShadow: "0px 0px 20px #000000"}}>OilfieldTools</span>
@@ -25,7 +22,23 @@ const LandingPage = () => {
             OilfieldTools.
           </p>
         </div>
-        <SearchLanding />
+        <div className="flex gap-4">
+  <Link to={"/about"}>
+    <Button
+      className="bg-cyan-500 hover:bg-cyan-600 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition-all duration-300"
+    >
+      About Us
+    </Button>
+  </Link>
+  <Link to={"/products"}>
+    <Button
+      className="bg-transparent border-2 border-cyan-500 text-cyan-500 hover:bg-cyan-500  hover:text-white font-semibold px-6 py-3 rounded-lg shadow-md transition-all duration-300"
+    >
+      Products
+    </Button>
+  </Link>
+</div>
+
       </div>
 
       <Swiper
