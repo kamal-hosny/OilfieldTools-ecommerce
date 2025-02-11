@@ -26,7 +26,7 @@ const Products = () => {
   const [cardGrid, setCardGrid] = useState<boolean>(true);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState<string>("");
-  const [filterPrice, setFilterPrice] = useState({ from: "", to: "" });
+  const [filterPrice, setFilterPrice] = useState({ from: "0", to: "99999" });
   const [pageNumber, setPageNumber] = useState<number | null>(1);
   const [limit, setLimit] = useState<number | null>(10);
 
