@@ -17,7 +17,7 @@ const OurClients = () => {
               {
                 numbers.map((x) => (
                   <div key={x} className="image h-[54px] w-40 rounded-sm p-2 flex justify-center items-center">
-                    <Img className='h-full w-full object-contain grayscale hover:grayscale-0' src={`/src/assets/clients/client${x}.png`} alt="" />
+                    <Img className='h-full w-full object-contain grayscale hover:grayscale-0' src={`/clients/client${x}.png`} alt="" />
                   </div>
                 ))
               }
