@@ -103,11 +103,13 @@ const OurProducts = () => {
 
         {/* Footer Section */}
         <div className="flex items-center justify-between">
-          <div className="counter text-color-text-2 space-x-1">
-            <span className="text-color-text-1">{String(currentSlide).padStart(2, "0")}</span>
-            <span>of</span>
-            <span>{String(totalSlides).padStart(2, "0")}</span>
-          </div>
+          {products && (
+                      <div className="counter text-color-text-2 space-x-1">
+                      <span className="text-color-text-1">{String(currentSlide).padStart(2, "0")}</span>
+                      <span>of</span>
+                      <span>{String(totalSlides).padStart(2, "0")}</span>
+                    </div>
+          )}
           <div className="swiper-navigation flex gap-4">
             <button
               className="swiper-prev-OurProducts border-2 border-color-border p-2 text-color-text-2 hover:text-color-text-1 rounded-full cursor-pointer"
